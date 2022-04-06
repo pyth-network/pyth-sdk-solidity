@@ -16,10 +16,10 @@ To read the latest price, call [`queryPriceFeed`](IPyth.sol) with the Price ID o
 import "@pythnetwork/pyth-sdk-solidity/IPyth.sol";
 
 contract ExampleContract {
-    Pyth pyth;
+    IPyth pyth;
 
     constructor(address pythContract) {
-        pyth = Pyth(pythContract);
+        pyth = IPyth(pythContract);
     }
 
     getBTCUSDPrice() public view returns (int64 price, uint64 conf, int32 expo) {
