@@ -14,6 +14,7 @@ To read the latest price, call [`queryPriceFeed`](IPyth.sol) with the Price ID o
 
 ```solidity
 import "@pythnetwork/pyth-sdk-solidity/IPyth.sol";
+import "@pythnetwork/pyth-sdk-solidity/PythSDK.sol";
 
 contract ExampleContract {
     IPyth pyth;
@@ -22,10 +23,14 @@ contract ExampleContract {
         pyth = IPyth(pythContract);
     }
 
-    getBTCUSDPrice() public view returns (int64 price, uint64 conf, int32 expo) {
+    getBTCUSDPrice() public view returns (bool valid, int64 price, uint64 conf, int32 expo) {
         bytes32 priceID = "0xf9...";
         PythStructs.PriceFeedResponse feed = pyth.queryPriceFeed(priceID);
-        return (feed.price, feed.conf, feed.expo)
+
+        // CAUTION: only use the price when the status is TRADING.
+        bool valid = feed.status == PythSDK.PriceStatus.TRADING;
+
+        return (valid, feed.price, feed.conf, feed.expo)
     }
 }
 ```
