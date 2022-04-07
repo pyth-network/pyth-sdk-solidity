@@ -5,7 +5,7 @@ import "solidity-bytes-utils/contracts/BytesLib.sol";
 
 contract PythSDK {
     
-    // PriceFeed represents a current aggregation price from pyth publisher feeds.
+    // PriceFeed represents a current aggregate price from pyth publisher feeds.
     struct PriceFeed {
         // The price ID.
         bytes32 id;
