@@ -27,14 +27,14 @@ contract PythSDK {
         int64 emaPrice;
         // Exponentially moving average confidence interval.
         uint64 emaConf;
-        // Unix timestamp describing when the price was computed
-        int64 timestamp;
+        // Unix timestamp describing when the price was published
+        uint64 publishTime;
         // Price of previous price with TRADING status
-        int64 prev_price;
+        int64 prevPrice;
         // Confidence interval of previous price with TRADING status
-        uint64 prev_conf;
-        // Unix timestamp describing when the previous price with TRADING status was computed
-        int64 prev_timestamp;
+        uint64 prevConf;
+        // Unix timestamp describing when the previous price with TRADING status was published
+        uint64 prevPublishTime;
     }
 
     /* PriceStatus represents the availability status of a price feed.
