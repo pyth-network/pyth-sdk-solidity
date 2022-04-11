@@ -6,7 +6,7 @@ import "./IPyth.sol";
 
 abstract contract AbstractPyth is IPyth {
 
-    function getPriceFeed(bytes32 id) internal virtual returns (PythStructs.PriceFeed memory priceFeed);
+    function getPriceFeed(bytes32 id) public virtual returns (PythStructs.PriceFeed memory priceFeed);
     
     function getCurrentPrice(bytes32 id) external returns (PythStructs.Price memory price) {
         PythStructs.PriceFeed memory priceFeed = getPriceFeed(id);
