@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import "./PythStructs.sol";
 
 /// @title Consume prices from the Pyth Network (https://pyth.network/).
+/// @dev Please refer to the guidance at https://docs.pyth.network/consumers/best-practices for how to consume prices safely.
 /// @author Pyth Data Association
 interface IPyth {
 
