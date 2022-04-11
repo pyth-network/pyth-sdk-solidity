@@ -22,8 +22,6 @@ abstract contract AbstractPyth is IPyth {
     function getEMAPrice(bytes32 id) external returns (PythStructs.Price memory price) {
         PythStructs.PriceFeed memory priceFeed = getPriceFeed(id);
 
-        require(priceFeed.status == PythStructs.PriceStatus.TRADING, "current EMA price unavailable");
-
         price.price = priceFeed.emaPrice;
         price.conf = priceFeed.emaConf;
         price.expo = priceFeed.expo;
