@@ -10,11 +10,16 @@ npm install @pythnetwork/pyth-sdk-solidity
 
 ## Example Usage
 
-To read the latest price, call [`queryPriceFeed`](IPyth.sol) with the Price ID of the price feed you're interested in. The price feeds available on each chain are listed [below](#target-chains).
+To consume prices you should use the [`IPyth`](IPyth.sol) interface. Please make sure to read the documentation of this interface in order to use the prices safely.
+
+For example, to read the latest price, call [`getCurrentPrice`](IPyth.sol) with the Price ID of the price feed you're interested in. The price feeds available on each chain are listed [below](#target-chains).
 
 ```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
 import "@pythnetwork/pyth-sdk-solidity/IPyth.sol";
-import "@pythnetwork/pyth-sdk-solidity/PythSDK.sol";
+import "@pythnetwork/pyth-sdk-solidity/PythStructs.sol";
 
 contract ExampleContract {
     IPyth pyth;
@@ -23,14 +28,9 @@ contract ExampleContract {
         pyth = IPyth(pythContract);
     }
 
-    getBTCUSDPrice() public view returns (bool valid, int64 price, uint64 conf, int32 expo) {
-        bytes32 priceID = "0xf9...";
-        PythStructs.PriceFeedResponse feed = pyth.queryPriceFeed(priceID);
-
-        // CAUTION: only use the price when the status is TRADING.
-        bool valid = feed.status == PythSDK.PriceStatus.TRADING;
-
-        return (valid, feed.price, feed.conf, feed.expo)
+    function getBTCUSDPrice() public returns (PythStructs.Price memory) {
+        bytes32 priceID = 0xf9c0172ba10dfa4d19088d94f5bf61d3b54d5bd7483a322a982e1373ee8ea31b;
+        return pyth.getCurrentPrice(priceID);
     }
 }
 ```
