@@ -19,7 +19,7 @@ abstract contract AbstractPyth is IPyth {
         return price;
     }
 
-    function getEMAPrice(bytes32 id) external returns (PythStructs.Price memory price) {
+    function getEmaPrice(bytes32 id) external returns (PythStructs.Price memory price) {
         PythStructs.PriceFeed memory priceFeed = getPriceFeed(id);
 
         price.price = priceFeed.emaPrice;
