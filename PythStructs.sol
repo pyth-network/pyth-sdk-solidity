@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.0;
 
-import "solidity-bytes-utils/contracts/BytesLib.sol";
-
 contract PythStructs {
 
     // A price with a degree of uncertainty, represented as a price +- a confidence interval.
