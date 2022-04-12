@@ -1,6 +1,6 @@
 {
   "name": "@pythnetwork/pyth-sdk-solidity",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Read prices from the Pyth oracle",
   "repository": {
     "type": "git",
@@ -16,8 +16,5 @@
   "bugs": {
     "url": "https://github.com/pyth-network/pyth-sdk-solidity/issues"
   },
-  "homepage": "https://github.com/pyth-network/pyth-sdk-solidity#readme",
-  "dependencies": {
-    "solidity-bytes-utils": "^0.8.0"
-  }
+  "homepage": "https://github.com/pyth-network/pyth-sdk-solidity#readme"
 }

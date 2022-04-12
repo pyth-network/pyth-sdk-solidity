@@ -6,10 +6,10 @@ import "./IPyth.sol";
 
 abstract contract AbstractPyth is IPyth {
 
-    function getPriceFeed(bytes32 id) public virtual returns (PythStructs.PriceFeed memory priceFeed);
+    function queryPriceFeed(bytes32 id) public virtual returns (PythStructs.PriceFeed memory priceFeed);
     
-    function getCurrentPrice(bytes32 id) external returns (PythStructs.Price memory price) {
-        PythStructs.PriceFeed memory priceFeed = getPriceFeed(id);
+    function getCurrentPrice(bytes32 id) external override returns (PythStructs.Price memory price) {
+        PythStructs.PriceFeed memory priceFeed = queryPriceFeed(id);
 
         require(priceFeed.status == PythStructs.PriceStatus.TRADING, "current price unavailable");
 
@@ -19,8 +19,8 @@ abstract contract AbstractPyth is IPyth {
         return price;
     }
 
-    function getEmaPrice(bytes32 id) external returns (PythStructs.Price memory price) {
-        PythStructs.PriceFeed memory priceFeed = getPriceFeed(id);
+    function getEmaPrice(bytes32 id) external override returns (PythStructs.Price memory price) {
+        PythStructs.PriceFeed memory priceFeed = queryPriceFeed(id);
 
         price.price = priceFeed.emaPrice;
         price.conf = priceFeed.emaConf;
@@ -28,8 +28,8 @@ abstract contract AbstractPyth is IPyth {
         return price;
     }
 
-    function getPrevPriceUnsafe(bytes32 id) external returns (PythStructs.Price memory price, uint64 publishTime) {
-        PythStructs.PriceFeed memory priceFeed = getPriceFeed(id);
+    function getPrevPriceUnsafe(bytes32 id) external override returns (PythStructs.Price memory price, uint64 publishTime) {
+        PythStructs.PriceFeed memory priceFeed = queryPriceFeed(id);
 
         price.price = priceFeed.prevPrice;
         price.conf = priceFeed.prevConf;
