@@ -8,7 +8,7 @@ abstract contract AbstractPyth is IPyth {
 
     function queryPriceFeed(bytes32 id) public virtual returns (PythStructs.PriceFeed memory priceFeed);
     
-    function getCurrentPrice(bytes32 id) external returns (PythStructs.Price memory price) {
+    function getCurrentPrice(bytes32 id) external override returns (PythStructs.Price memory price) {
         PythStructs.PriceFeed memory priceFeed = queryPriceFeed(id);
 
         require(priceFeed.status == PythStructs.PriceStatus.TRADING, "current price unavailable");
@@ -19,7 +19,7 @@ abstract contract AbstractPyth is IPyth {
         return price;
     }
 
-    function getEmaPrice(bytes32 id) external returns (PythStructs.Price memory price) {
+    function getEmaPrice(bytes32 id) external override returns (PythStructs.Price memory price) {
         PythStructs.PriceFeed memory priceFeed = queryPriceFeed(id);
 
         price.price = priceFeed.emaPrice;
@@ -28,7 +28,7 @@ abstract contract AbstractPyth is IPyth {
         return price;
     }
 
-    function getPrevPriceUnsafe(bytes32 id) external returns (PythStructs.Price memory price, uint64 publishTime) {
+    function getPrevPriceUnsafe(bytes32 id) external override returns (PythStructs.Price memory price, uint64 publishTime) {
         PythStructs.PriceFeed memory priceFeed = queryPriceFeed(id);
 
         price.price = priceFeed.prevPrice;
