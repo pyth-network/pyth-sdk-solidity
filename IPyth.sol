@@ -26,4 +26,8 @@ interface IPyth {
     /// @return publishTime - the UNIX timestamp of when this price was computed.
     function getPrevPriceUnsafe(bytes32 id) external view returns (PythStructs.Price memory price, uint64 publishTime);
 
+    /// @notice Update price feeds with given update messages if they are more recent than the current stored prices.
+    /// The call will succeed even if the update is not the most recent.
+    /// @dev Reverts if the updateData is invalid.
+    function updatePriceFeeds(bytes[] memory updateData) external;
 }
