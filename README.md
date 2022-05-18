@@ -47,7 +47,7 @@ This signed message can then be submitted to the Pyth contract on the EVM networ
 
 ### On-demand price updates
 
-Price updates are not submitted on the EVM networks automatically: rather, when a consumer needs to use the value of a price they should first submit the latest Wormhole update for that price to the Pyth contract on the EVM network they are working on. This will make the most recent price update available on-chain for EVM contracts to use. Price Service provides an API to get these messages, Refer to (pyth-evm-js)[https://github.com/pyth-network/pyth-js/tree/main/pyth-evm-js] for more information on how to use it.
+Price updates are not submitted on the EVM networks automatically: rather, when a consumer needs to use the value of a price they should first submit the latest Wormhole update for that price to the Pyth contract on the EVM network they are working on. This will make the most recent price update available on-chain for EVM contracts to use. Updating the price needs to be done in an off-chain program, using the (pyth-evm-js)[https://github.com/pyth-network/pyth-js/tree/main/pyth-evm-js] package. 
 
 ## Solidity Target Chains
 The Pyth oracle is currently live on the following chains which support Solidity, with the following symbols:
