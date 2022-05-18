@@ -30,8 +30,8 @@ contract ExampleContract {
 
     function getBTCUSDPrice(bytes[] memory priceUpdateData) public returns (PythStructs.Price memory) {
         // Update the prices to be set to the latest values. The `priceUpdateData` data should be
-        // retrieved from our off-chain Price Service API using the [pyth-evm-js](https://github.com/pyth-network/pyth-js/tree/main/pyth-evm-js)
-        // package. See section "How Pyth Works on EVM Chains" below for more information.
+        // retrieved from our off-chain Price Service API using the `pyth-evm-js` package.
+        // See section "How Pyth Works on EVM Chains" below for more information.
         pyth.updatePriceFeeds(priceUpdateData);
 
         bytes32 priceID = 0xf9c0172ba10dfa4d19088d94f5bf61d3b54d5bd7483a322a982e1373ee8ea31b;
