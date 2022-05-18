@@ -28,12 +28,28 @@ contract ExampleContract {
         pyth = IPyth(pythContract);
     }
 
-    function getBTCUSDPrice() public returns (PythStructs.Price memory) {
+    function getBTCUSDPrice(bytes[] memory priceUpdateData) public returns (PythStructs.Price memory) {
+        // Update the prices to be set to the latest values. The `priceUpdateData` data should be
+        // retrieved from our off-chain Price Service API using the `pyth-evm-js` package.
+        // See section "How Pyth Works on EVM Chains" below for more information.
+        pyth.updatePriceFeeds(priceUpdateData);
+
         bytes32 priceID = 0xf9c0172ba10dfa4d19088d94f5bf61d3b54d5bd7483a322a982e1373ee8ea31b;
         return pyth.getCurrentPrice(priceID);
     }
 }
 ```
+
+
+## How Pyth Works on EVM Chains
+
+Pyth prices are published on Solana, and relayed to EVM chains using the [Wormhole Network](https://wormholenetwork.com/) as a cross-chain message passing bridge. The Wormhole Network observes when Pyth prices on Solana have changed and publishes an off-chain signed message attesting to this fact. This is explained in more detail [here](https://docs.wormholenetwork.com/wormhole/).
+
+This signed message can then be submitted to the Pyth contract on the EVM networks, which will verify the Wormhole message and update the Pyth contract with the new price.
+
+### On-demand price updates
+
+Price updates are not submitted on the EVM networks automatically: rather, when a consumer needs to use the value of a price they should first submit the latest Wormhole update for that price to the Pyth contract on the EVM network they are working on. This will make the most recent price update available on-chain for EVM contracts to use. Updating the price needs to be done in an off-chain program, using the [pyth-evm-js](https://github.com/pyth-network/pyth-js/tree/main/pyth-evm-js) package. 
 
 ## Solidity Target Chains
 The Pyth oracle is currently live on the following chains which support Solidity, with the following symbols:
