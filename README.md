@@ -57,4 +57,4 @@ The Pyth oracle is currently live on the following chains which support Solidity
 ### Binance Smart Chain Testnet
 Contract address: `0x621284a611b64dEa837924092F3B6C12C03C386E`
 
-You can find a list of available price feeds [here](https://pyth.network/developers/price-feeds/#binance-smart-chain-testnet)
+You can find a list of available price feeds [here](https://pyth.network/developers/price-feed-ids/#binance-smart-chain-testnet)
