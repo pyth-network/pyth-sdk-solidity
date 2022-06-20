@@ -53,3 +53,5 @@ Price updates are not submitted on the EVM networks automatically: rather, when 
 
 ## Solidity Target Chains
 The Pyth oracle is currently live many different chainswhich support Solidity, you can find out the details [here](https://docs.pyth.network/consume-data/evm#networks)
+
+You can find a list of available price feeds [here](https://pyth.network/developers/price-feed-ids/).
