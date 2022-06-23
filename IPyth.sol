@@ -7,6 +7,8 @@ import "./PythStructs.sol";
 /// @dev Please refer to the guidance at https://docs.pyth.network/consumers/best-practices for how to consume prices safely.
 /// @author Pyth Data Association
 interface IPyth {
+    /// @dev Emitted when price feed with `id` is updated.
+    event PriceUpdate(bytes32 indexed id, uint64 publishTime);
 
     /// @notice Returns the current price and confidence interval.
     /// @dev Reverts if the current price is not available.
