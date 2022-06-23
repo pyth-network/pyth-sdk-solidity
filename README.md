@@ -55,3 +55,6 @@ Price updates are not submitted on the EVM networks automatically: rather, when 
 [This](https://docs.pyth.network/consume-data/evm#networks) document contains list of the EVM networks that Pyth is available on.
 
 You can find a list of available price feeds [here](https://pyth.network/developers/price-feed-ids/).
+
+## Mocking Pyth
+[MockPyth](./MockPyth.sol) is a Mock contract that you can use and deploy locally to mock Pyth contract behaviour. To set and update price feeds you should call `updatePriceFeeds` and provide an array of encoded price feeds (the struct defined in [PythStructs](./PythStructs.sol)) as its argument. You can create encoded price feeds either by using web3.js or ethers ABI utilities or calling `createPriceFeedUpdateData` function in the mock contract.
