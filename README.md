@@ -58,3 +58,9 @@ You can find a list of available price feeds [here](https://pyth.network/develop
 
 ## Mocking Pyth
 [MockPyth](./MockPyth.sol) is a mock contract that you can use and deploy locally to mock Pyth contract behaviour. To set and update price feeds you should call `updatePriceFeeds` and provide an array of encoded price feeds (the struct defined in [PythStructs](./PythStructs.sol)) as its argument. You can create encoded price feeds either by using web3.js or ethers ABI utilities or calling `createPriceFeedUpdateData` function in the mock contract.
+
+## Releases
+
+We use [Semantic Versioning](https://semver.org/) for our releases. In order to release a new version of this package and publish it to npm, follow these steps: 
+1. Run `npm version <new version number> --no-git-tag-version`. This command will update the version of the package. Then push your changes to github.
+2. Once your change is merged into `main`, create a release with tag `v<new version number>` like `v1.5.2`, and a github action will automatically publish the new version of this package to npm.
