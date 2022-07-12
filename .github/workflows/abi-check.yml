@@ -1,0 +1,27 @@
+name: ABI Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  abi-check:
+    name: Check ABI changes are committed
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+      - run: npm ci
+      - name: Generate ABI
+        run: npm run generate-abi
+      - name: Schema Changes
+        # fails if any changes not committed
+        run: git diff --exit-code schema
