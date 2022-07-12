@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 jobs:
   abi-check:
-    name: Check ABI changes are committed
+    name: Check ABI files are up to date
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -18,5 +18,6 @@ jobs:
       - name: Generate ABI
         run: npm run generate-abi
       - name: Check ABI changes
-        # fails if any changes not committed
+        # Fails if the ABI files are not up to date. Please use npm run generate-abi to regenerate the ABI files for
+        # the current version of the contracts.
         run: git diff --exit-code IPythAbi.json
