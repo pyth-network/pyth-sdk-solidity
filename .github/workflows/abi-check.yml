@@ -22,6 +22,6 @@ jobs:
       - run: npm ci
       - name: Generate ABI
         run: npm run generate-abi
-      - name: Schema Changes
+      - name: Check ABI changes
         # fails if any changes not committed
         run: git diff --exit-code IPythAbi.json
