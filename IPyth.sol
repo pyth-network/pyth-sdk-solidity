@@ -7,8 +7,11 @@ import "./PythStructs.sol";
 /// @dev Please refer to the guidance at https://docs.pyth.network/consumers/best-practices for how to consume prices safely.
 /// @author Pyth Data Association
 interface IPyth {
-    /// @dev Emitted when price feed with `id` is updated.
-    event PriceUpdate(bytes32 indexed id, uint64 publishTime);
+    /// @dev Emitted when an update for price feed with `id` is provided.
+    event PriceUpdate(bytes32 indexed id, bool indexed updated, uint64 existingPublishTime, uint64 publishTime, int64 price, uint64 conf);
+
+    /// @dev Emitted when an updatePriceFeeds call ends successfully.
+    event UpdatePriceFeedsCall(address indexed sender, int8 chainId, uint64 sequenceNumber, uint totalPrices, uint updatedPrices);
 
     /// @notice Returns the current price and confidence interval.
     /// @dev Reverts if the current price is not available.

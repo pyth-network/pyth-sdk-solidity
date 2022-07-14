@@ -9,13 +9,74 @@
         "type": "bytes32"
       },
       {
+        "indexed": true,
+        "internalType": "bool",
+        "name": "updated",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint64",
+        "name": "existingPublishTime",
+        "type": "uint64"
+      },
+      {
         "indexed": false,
         "internalType": "uint64",
         "name": "publishTime",
         "type": "uint64"
+      },
+      {
+        "indexed": false,
+        "internalType": "int64",
+        "name": "price",
+        "type": "int64"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint64",
+        "name": "conf",
+        "type": "uint64"
       }
     ],
     "name": "PriceUpdate",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "int8",
+        "name": "chainId",
+        "type": "int8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint64",
+        "name": "sequenceNumber",
+        "type": "uint64"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "totalPrices",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "updatedPrices",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdatePriceFeedsCall",
     "type": "event"
   },
   {

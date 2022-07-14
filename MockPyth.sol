@@ -17,9 +17,10 @@ contract MockPyth is AbstractPyth {
     function updatePriceFeeds(bytes[] memory updateData) public override {
         for(uint i = 0; i < updateData.length; i++) {
             PythStructs.PriceFeed memory priceFeed = abi.decode(updateData[i], (PythStructs.PriceFeed));
+            emit PriceUpdate(priceFeed.id, true, priceFeed.publishTime, priceFeeds[priceFeed.id].publishTime, priceFeed.price, priceFeed.conf);
             priceFeeds[priceFeed.id] = priceFeed;
-            emit PriceUpdate(priceFeed.id, priceFeed.publishTime);
         }
+        emit UpdatePriceFeedsCall(msg.sender, 0, 0, updateData.length, updateData.length);
     }
 
     function createPriceFeedUpdateData(
