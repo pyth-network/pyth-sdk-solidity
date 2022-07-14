@@ -4,11 +4,11 @@ pragma solidity ^0.8.0;
 contract PythStructs {
 
     // A price with a degree of uncertainty, represented as a price +- a confidence interval.
-    // 
+    //
     // The confidence interval roughly corresponds to the standard error of a normal distribution.
-    // Both the price and confidence are stored in a fixed-point numeric representation, 
+    // Both the price and confidence are stored in a fixed-point numeric representation,
     // `x * (10^expo)`, where `expo` is the exponent.
-    // 
+    //
     // Please refer to the documentation at https://docs.pyth.network/consumers/best-practices for how
     // to how this price safely.
     struct Price {
@@ -19,7 +19,7 @@ contract PythStructs {
         // Price exponent
         int32 expo;
     }
-    
+
     // PriceFeed represents a current aggregate price from pyth publisher feeds.
     struct PriceFeed {
         // The price ID.
