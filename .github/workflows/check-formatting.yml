@@ -1,5 +1,4 @@
-name: Pre-commit check
-# It checks both formatting and also makes sure contract compiles and ABIs are up to date.
+name: Check formatting
 
 on:
   pull_request:

@@ -10,17 +10,3 @@ repos:
     rev: "v2.6.2"
     hooks:
       - id: prettier
-  - repo: local
-    hooks:
-      - id: build-check
-        name: Check contracts build
-        language: "node"
-        entry: npm run build-mock
-        pass_filenames: false
-  - repo: local
-    hooks:
-      - id: abi-check
-        name: Check ABI
-        language: "node"
-        entry: npm run generate-abi
-        pass_filenames: false
