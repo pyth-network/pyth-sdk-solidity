@@ -1,10 +1,12 @@
 # Pyth Solidity SDK
+
 This package provides utilities for consuming prices from the [Pyth Network](https://pyth.network/) Oracle using Solidity. Also, it contains [the Pyth Interface ABI](./IPythAbi.json) that you can use in your libraries
 to communicate with the contract.
 
 It is **strongly recommended** to follow the [consumer best practices](https://docs.pyth.network/consumers/best-practices) when consuming Pyth data.
 
 ## Installation
+
 ```bash
 npm install @pythnetwork/pyth-sdk-solidity
 ```
@@ -49,21 +51,31 @@ This signed message can then be submitted to the Pyth contract on the EVM networ
 
 ### On-demand price updates
 
-Price updates are not submitted on the EVM networks automatically: rather, when a consumer needs to use the value of a price they should first submit the latest Wormhole update for that price to the Pyth contract on the EVM network they are working on. This will make the most recent price update available on-chain for EVM contracts to use. Updating the price needs to be done in an off-chain program, using the [pyth-evm-js](https://github.com/pyth-network/pyth-js/tree/main/pyth-evm-js) package. 
+Price updates are not submitted on the EVM networks automatically: rather, when a consumer needs to use the value of a price they should first submit the latest Wormhole update for that price to the Pyth contract on the EVM network they are working on. This will make the most recent price update available on-chain for EVM contracts to use. Updating the price needs to be done in an off-chain program, using the [pyth-evm-js](https://github.com/pyth-network/pyth-js/tree/main/pyth-evm-js) package.
 
 ## Solidity Target Chains
+
 [This](https://docs.pyth.network/consume-data/evm#networks) document contains list of the EVM networks that Pyth is available on.
 
 You can find a list of available price feeds [here](https://pyth.network/developers/price-feed-ids/).
 
 ## Mocking Pyth
+
 [MockPyth](./MockPyth.sol) is a mock contract that you can use and deploy locally to mock Pyth contract behaviour. To set and update price feeds you should call `updatePriceFeeds` and provide an array of encoded price feeds (the struct defined in [PythStructs](./PythStructs.sol)) as its argument. You can create encoded price feeds either by using web3.js or ethers ABI utilities or calling `createPriceFeedUpdateData` function in the mock contract.
 
 ## Development
+
 When making changes to the contract, please make sure to update the ABI. You can update it using `npm run generate-abi` and it will update `IPythAbi.json` file.
 
-## Releases
+### Releases
 
-We use [Semantic Versioning](https://semver.org/) for our releases. In order to release a new version of this package and publish it to npm, follow these steps: 
+We use [Semantic Versioning](https://semver.org/) for our releases. In order to release a new version of this package and publish it to npm, follow these steps:
+
 1. Run `npm version <new version number> --no-git-tag-version`. This command will update the version of the package. Then push your changes to github.
 2. Once your change is merged into `main`, create a release with tag `v<new version number>` like `v1.5.2`, and a github action will automatically publish the new version of this package to npm.
+
+### pre-commit hooks
+
+pre-commit is a tool that checks and fixes simple issues (formatting, build, ...) before each commit. You can install it by following [their website](https://pre-commit.com/). In order to enable checks for this repo run `pre-commit install` from command-line in the root of this repo.
+
+The checks are also performed in the CI to ensure the code follows consistent formatting and can be built.

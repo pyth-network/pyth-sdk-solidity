@@ -7,7 +7,8 @@
     "url": "git+https://github.com/pyth-network/pyth-sdk-solidity.git"
   },
   "scripts": {
-    "generate-abi": "node scripts/generateAbi.js"
+    "generate-abi": "node scripts/generateAbi.js",
+    "build-mock": "solcjs --bin MockPyth.sol -o build/"
   },
   "keywords": [
     "pyth",

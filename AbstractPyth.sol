@@ -7,7 +7,7 @@ import "./IPyth.sol";
 abstract contract AbstractPyth is IPyth {
 
     function queryPriceFeed(bytes32 id) public view virtual returns (PythStructs.PriceFeed memory priceFeed);
-    
+
     function getCurrentPrice(bytes32 id) external view override returns (PythStructs.Price memory price) {
         PythStructs.PriceFeed memory priceFeed = queryPriceFeed(id);
 

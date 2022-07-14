@@ -12,7 +12,7 @@ contract MockPyth is AbstractPyth {
     }
 
     // Takes an array of encoded price feeds and stores them.
-    // You can create this data either by calling createPriceFeedData or 
+    // You can create this data either by calling createPriceFeedData or
     // by using web3.js or ethers abi utilities.
     function updatePriceFeeds(bytes[] memory updateData) public override {
         for(uint i = 0; i < updateData.length; i++) {
