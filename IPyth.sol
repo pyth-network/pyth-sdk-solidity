@@ -7,11 +7,22 @@ import "./PythStructs.sol";
 /// @dev Please refer to the guidance at https://docs.pyth.network/consumers/best-practices for how to consume prices safely.
 /// @author Pyth Data Association
 interface IPyth {
-    /// @dev Emitted when an update for price feed with `id` is provided.
-    event PriceUpdate(bytes32 indexed id, bool indexed updated, uint64 existingPublishTime, uint64 publishTime, int64 price, uint64 conf);
+    /// @dev Emitted when an update for price feed with `id` is processed successfully.
+    /// @param id The Pyth Price Feed ID.
+    /// @param stored It's true if the price update is more recent and stored.
+    /// @param existingPublishTime Publish time of the previously stored price.
+    /// @param publishTime Publish time of the given price update.
+    /// @param price Current price of the given price update.
+    /// @param conf Current confidence interval of the given price update.
+    event PriceUpdate(bytes32 indexed id, bool indexed stored, uint64 existingPublishTime, uint64 publishTime, int64 price, uint64 conf);
 
-    /// @dev Emitted when an updatePriceFeeds call ends successfully.
-    event UpdatePriceFeedsCall(address indexed sender, int8 chainId, uint64 sequenceNumber, uint totalPrices, uint updatedPrices);
+    /// @dev Emitted when an batch price update is processed successfully.
+    /// @param sender Sender of this call (`msg.sender`).
+    /// @param chainId ID of the source chain that the batch price update comes from.
+    /// @param sequenceNumber Sequence number of the batch price update.
+    /// @param numTotalPrices Number of prices within the batch price update.
+    /// @param numStoredPrices Number of prices that were more recent and were stored.
+    event BatchPriceUpdate(address indexed sender, int8 chainId, uint64 sequenceNumber, uint numTotalPrices, uint numStoredPrices);
 
     /// @notice Returns the current price and confidence interval.
     /// @dev Reverts if the current price is not available.
