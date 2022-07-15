@@ -6,6 +6,7 @@ import "./PythStructs.sol";
 
 contract MockPyth is AbstractPyth {
     mapping(bytes32 => PythStructs.PriceFeed) priceFeeds;
+    uint64 sequenceNumber;
 
     function queryPriceFeed(bytes32 id) public override view returns (PythStructs.PriceFeed memory priceFeed) {
         return priceFeeds[id];
@@ -15,12 +16,26 @@ contract MockPyth is AbstractPyth {
     // You can create this data either by calling createPriceFeedData or
     // by using web3.js or ethers abi utilities.
     function updatePriceFeeds(bytes[] memory updateData) public override {
+        uint numStoredPrices = 0;
+
         for(uint i = 0; i < updateData.length; i++) {
             PythStructs.PriceFeed memory priceFeed = abi.decode(updateData[i], (PythStructs.PriceFeed));
-            emit PriceUpdate(priceFeed.id, true, priceFeed.publishTime, priceFeeds[priceFeed.id].publishTime, priceFeed.price, priceFeed.conf);
-            priceFeeds[priceFeed.id] = priceFeed;
+
+            if (priceFeeds[priceFeed.id].publishTime < priceFeed.publishTime) {
+                emit PriceUpdate(priceFeed.id, true, priceFeed.publishTime, priceFeeds[priceFeed.id].publishTime, priceFeed.price, priceFeed.conf);
+                priceFeeds[priceFeed.id] = priceFeed;
+                numStoredPrices += 1;
+            } else {
+                // The price update is not stored because an update with more recent publish time is already stored.
+                emit PriceUpdate(priceFeed.id, false, priceFeed.publishTime, priceFeeds[priceFeed.id].publishTime, priceFeed.price, priceFeed.conf);
+            }
         }
-        emit UpdatePriceFeedsCall(msg.sender, 0, 0, updateData.length, updateData.length);
+
+        // This event is emitted when a batch is processed. In this mock contract there is no source chain
+        // and sequence number. So, chainId is set to 1 and an increasing sequence number is used.
+        emit BatchPriceUpdate(msg.sender, 1, sequenceNumber, updateData.length, numStoredPrices);
+
+        sequenceNumber += 1;
     }
 
     function createPriceFeedUpdateData(
