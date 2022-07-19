@@ -17,17 +17,17 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "numTotalPrices",
+        "name": "batchSize",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "numStoredPrices",
+        "name": "freshPricesInBatch",
         "type": "uint256"
       }
     ],
-    "name": "BatchPriceUpdate",
+    "name": "BatchPriceFeedUpdate",
     "type": "event"
   },
   {
@@ -42,7 +42,7 @@
       {
         "indexed": true,
         "internalType": "bool",
-        "name": "stored",
+        "name": "fresh",
         "type": "bool"
       },
       {
@@ -82,7 +82,7 @@
         "type": "uint64"
       }
     ],
-    "name": "PriceUpdate",
+    "name": "PriceFeedUpdate",
     "type": "event"
   },
   {
@@ -97,7 +97,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "numTotalBatches",
+        "name": "batchCount",
         "type": "uint256"
       }
     ],

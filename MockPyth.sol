@@ -16,7 +16,7 @@ contract MockPyth is AbstractPyth {
     // You can create this data either by calling createPriceFeedData or
     // by using web3.js or ethers abi utilities.
     function updatePriceFeeds(bytes[] memory updateData) public override {
-        uint numStoredPrices = 0;
+        uint freshFreshPrices = 0;
 
         // Chain ID is id of the source chain that the price update comes from. Since it is just a mock contract
         // We set it to 1.
@@ -25,22 +25,24 @@ contract MockPyth is AbstractPyth {
         for(uint i = 0; i < updateData.length; i++) {
             PythStructs.PriceFeed memory priceFeed = abi.decode(updateData[i], (PythStructs.PriceFeed));
 
-            if (priceFeeds[priceFeed.id].publishTime < priceFeed.publishTime) {
-                emit PriceUpdate(priceFeed.id, true, chainId, sequenceNumber, priceFeed.publishTime,
-                    priceFeeds[priceFeed.id].publishTime, priceFeed.price, priceFeed.conf);
+            bool fresh = false;
+            uint64 existingPublishTime = priceFeeds[priceFeed.id].publishTime;
+
+            if (existingPublishTime < priceFeed.publishTime) {
+                // Price information is more recent than the existing price information.
+                fresh = true;
                 priceFeeds[priceFeed.id] = priceFeed;
-                numStoredPrices += 1;
-            } else {
-                // The price update is not stored because an update with more recent publish time is already stored.
-                emit PriceUpdate(priceFeed.id, false, chainId, sequenceNumber,
-                    priceFeed.publishTime, priceFeeds[priceFeed.id].publishTime, priceFeed.price, priceFeed.conf);
+                freshFreshPrices += 1;
             }
+
+            emit PriceFeedUpdate(priceFeed.id, fresh, chainId, sequenceNumber, priceFeed.publishTime,
+                existingPublishTime, priceFeed.price, priceFeed.conf);
         }
 
         // In the real contract, the input of this function contains multiple batches that each contain multiple prices.
         // This event is emitted when a batch is processed. In this mock contract we consider there is only one batch of prices.
         // Each batch has (chainId, sequenceNumber) as it's unique identifier. Here chainId is set to 1 and an increasing sequence number is used.
-        emit BatchPriceUpdate(chainId, sequenceNumber, updateData.length, numStoredPrices);
+        emit BatchPriceFeedUpdate(chainId, sequenceNumber, updateData.length, freshFreshPrices);
         sequenceNumber += 1;
 
         // There is only 1 batch of prices

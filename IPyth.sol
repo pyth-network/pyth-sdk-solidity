@@ -9,26 +9,26 @@ import "./PythStructs.sol";
 interface IPyth {
     /// @dev Emitted when an update for price feed with `id` is processed successfully.
     /// @param id The Pyth Price Feed ID.
-    /// @param stored It's true if the price update is more recent and stored.
+    /// @param fresh True if the price update is more recent and stored.
     /// @param chainId ID of the source chain that the batch price update containing this price.
     /// @param sequenceNumber Sequence number of the batch price update containing this price.
     /// @param existingPublishTime Publish time of the previously stored price.
     /// @param publishTime Publish time of the given price update.
     /// @param price Current price of the given price update.
     /// @param conf Current confidence interval of the given price update.
-    event PriceUpdate(bytes32 indexed id, bool indexed stored, int8 chainId, uint64 sequenceNumber, uint64 existingPublishTime, uint64 publishTime, int64 price, uint64 conf);
+    event PriceFeedUpdate(bytes32 indexed id, bool indexed fresh, int8 chainId, uint64 sequenceNumber, uint64 existingPublishTime, uint64 publishTime, int64 price, uint64 conf);
 
     /// @dev Emitted when an batch price update is processed successfully.
     /// @param chainId ID of the source chain that the batch price update comes from.
     /// @param sequenceNumber Sequence number of the batch price update.
-    /// @param numTotalPrices Number of prices within the batch price update.
-    /// @param numStoredPrices Number of prices that were more recent and were stored.
-    event BatchPriceUpdate(int8 chainId, uint64 sequenceNumber, uint numTotalPrices, uint numStoredPrices);
+    /// @param batchSize Number of prices within the batch price update.
+    /// @param freshPricesInBatch Number of prices that were more recent and were stored.
+    event BatchPriceFeedUpdate(int8 chainId, uint64 sequenceNumber, uint batchSize, uint freshPricesInBatch);
 
     /// @dev Emitted when a call to `updatePriceFeeds` is processed successfully.
     /// @param sender Sender of this call (`msg.sender`).
-    /// @param numTotalBatches Number of batches that this function processed.
-    event UpdatePriceFeeds(address indexed sender, uint numTotalBatches);
+    /// @param batchCount Number of batches that this function processed.
+    event UpdatePriceFeeds(address indexed sender, uint batchCount);
 
 
     /// @notice Returns the current price and confidence interval.
