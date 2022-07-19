@@ -16,7 +16,7 @@ contract MockPyth is AbstractPyth {
     // You can create this data either by calling createPriceFeedData or
     // by using web3.js or ethers abi utilities.
     function updatePriceFeeds(bytes[] memory updateData) public override {
-        uint freshFreshPrices = 0;
+        uint freshPrices = 0;
 
         // Chain ID is id of the source chain that the price update comes from. Since it is just a mock contract
         // We set it to 1.
@@ -26,23 +26,23 @@ contract MockPyth is AbstractPyth {
             PythStructs.PriceFeed memory priceFeed = abi.decode(updateData[i], (PythStructs.PriceFeed));
 
             bool fresh = false;
-            uint64 existingPublishTime = priceFeeds[priceFeed.id].publishTime;
+            uint64 lastPublsihTime = priceFeeds[priceFeed.id].publishTime;
 
-            if (existingPublishTime < priceFeed.publishTime) {
+            if (lastPublsihTime < priceFeed.publishTime) {
                 // Price information is more recent than the existing price information.
                 fresh = true;
                 priceFeeds[priceFeed.id] = priceFeed;
-                freshFreshPrices += 1;
+                freshPrices += 1;
             }
 
             emit PriceFeedUpdate(priceFeed.id, fresh, chainId, sequenceNumber, priceFeed.publishTime,
-                existingPublishTime, priceFeed.price, priceFeed.conf);
+                lastPublsihTime, priceFeed.price, priceFeed.conf);
         }
 
         // In the real contract, the input of this function contains multiple batches that each contain multiple prices.
         // This event is emitted when a batch is processed. In this mock contract we consider there is only one batch of prices.
         // Each batch has (chainId, sequenceNumber) as it's unique identifier. Here chainId is set to 1 and an increasing sequence number is used.
-        emit BatchPriceFeedUpdate(chainId, sequenceNumber, updateData.length, freshFreshPrices);
+        emit BatchPriceFeedUpdate(chainId, sequenceNumber, updateData.length, freshPrices);
         sequenceNumber += 1;
 
         // There is only 1 batch of prices
