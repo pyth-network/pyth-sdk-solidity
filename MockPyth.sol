@@ -18,24 +18,33 @@ contract MockPyth is AbstractPyth {
     function updatePriceFeeds(bytes[] memory updateData) public override {
         uint numStoredPrices = 0;
 
+        // Chain ID is id of the source chain that the price update comes from. Since it is just a mock contract
+        // We set it to 1.
+        int8 chainId = 1;
+
         for(uint i = 0; i < updateData.length; i++) {
             PythStructs.PriceFeed memory priceFeed = abi.decode(updateData[i], (PythStructs.PriceFeed));
 
             if (priceFeeds[priceFeed.id].publishTime < priceFeed.publishTime) {
-                emit PriceUpdate(priceFeed.id, true, priceFeed.publishTime, priceFeeds[priceFeed.id].publishTime, priceFeed.price, priceFeed.conf);
+                emit PriceUpdate(priceFeed.id, true, chainId, sequenceNumber, priceFeed.publishTime,
+                    priceFeeds[priceFeed.id].publishTime, priceFeed.price, priceFeed.conf);
                 priceFeeds[priceFeed.id] = priceFeed;
                 numStoredPrices += 1;
             } else {
                 // The price update is not stored because an update with more recent publish time is already stored.
-                emit PriceUpdate(priceFeed.id, false, priceFeed.publishTime, priceFeeds[priceFeed.id].publishTime, priceFeed.price, priceFeed.conf);
+                emit PriceUpdate(priceFeed.id, false, chainId, sequenceNumber,
+                    priceFeed.publishTime, priceFeeds[priceFeed.id].publishTime, priceFeed.price, priceFeed.conf);
             }
         }
 
-        // This event is emitted when a batch is processed. In this mock contract there is no source chain
-        // and sequence number. So, chainId is set to 1 and an increasing sequence number is used.
-        emit BatchPriceUpdate(msg.sender, 1, sequenceNumber, updateData.length, numStoredPrices);
-
+        // In the real contract, the input of this function contains multiple batches that each contain multiple prices.
+        // This event is emitted when a batch is processed. In this mock contract we consider there is only one batch of prices.
+        // Each batch has (chainId, sequenceNumber) as it's unique identifier. Here chainId is set to 1 and an increasing sequence number is used.
+        emit BatchPriceUpdate(chainId, sequenceNumber, updateData.length, numStoredPrices);
         sequenceNumber += 1;
+
+        // There is only 1 batch of prices
+        emit UpdatePriceFeeds(msg.sender, 1);
     }
 
     function createPriceFeedUpdateData(

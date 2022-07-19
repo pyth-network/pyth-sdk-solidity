@@ -3,12 +3,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      },
-      {
         "indexed": false,
         "internalType": "int8",
         "name": "chainId",
@@ -53,6 +47,18 @@
       },
       {
         "indexed": false,
+        "internalType": "int8",
+        "name": "chainId",
+        "type": "int8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint64",
+        "name": "sequenceNumber",
+        "type": "uint64"
+      },
+      {
+        "indexed": false,
         "internalType": "uint64",
         "name": "existingPublishTime",
         "type": "uint64"
@@ -77,6 +83,25 @@
       }
     ],
     "name": "PriceUpdate",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "numTotalBatches",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdatePriceFeeds",
     "type": "event"
   },
   {
