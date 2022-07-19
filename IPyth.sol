@@ -31,5 +31,15 @@ interface IPyth {
     /// @notice Update price feeds with given update messages if they are more recent than the current stored prices.
     /// The call will succeed even if the update is not the most recent.
     /// @dev Reverts if the updateData is invalid.
-    function updatePriceFeeds(bytes[] memory updateData) external;
+    /// @param updateData Array of price update data.
+    /// @param feeAmount Fee amount in Wei or Pyth token.
+    /// @param feeUsingPythToken True if fee is paid using Pyth Token and false if it's paid using the network's native currency.
+    function updatePriceFeeds(bytes[] memory updateData, uint feeAmount, bool feeUsingPythToken) external payable;
+
+    /// @notice Returns the needed fee to update an array of price updates.
+    /// @dev Reverts if the updateData is invalid.
+    /// @param updateDataSize Number of price updates.
+    /// @param feeUsingPythToken True if fee is going to be paid using Pyth Token and false if it's going
+    /// to be paid using the network's native currency.
+    function getMinUpdateFee(uint updateDataSize, bool feeUsingPythToken) external view returns (uint feeAmount);
 }
