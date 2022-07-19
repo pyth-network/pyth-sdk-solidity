@@ -26,9 +26,9 @@ contract MockPyth is AbstractPyth {
             PythStructs.PriceFeed memory priceFeed = abi.decode(updateData[i], (PythStructs.PriceFeed));
 
             bool fresh = false;
-            uint64 lastPublsihTime = priceFeeds[priceFeed.id].publishTime;
+            uint64 lastPublishTime = priceFeeds[priceFeed.id].publishTime;
 
-            if (lastPublsihTime < priceFeed.publishTime) {
+            if (lastPublishTime < priceFeed.publishTime) {
                 // Price information is more recent than the existing price information.
                 fresh = true;
                 priceFeeds[priceFeed.id] = priceFeed;
@@ -36,7 +36,7 @@ contract MockPyth is AbstractPyth {
             }
 
             emit PriceFeedUpdate(priceFeed.id, fresh, chainId, sequenceNumber, priceFeed.publishTime,
-                lastPublsihTime, priceFeed.price, priceFeed.conf);
+                lastPublishTime, priceFeed.price, priceFeed.conf);
         }
 
         // In the real contract, the input of this function contains multiple batches that each contain multiple prices.
