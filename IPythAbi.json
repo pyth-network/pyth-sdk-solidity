@@ -109,7 +109,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "payedFee",
+        "name": "paidFee",
         "type": "uint256"
       }
     ],
