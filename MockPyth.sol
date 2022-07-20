@@ -8,10 +8,10 @@ contract MockPyth is AbstractPyth {
     mapping(bytes32 => PythStructs.PriceFeed) priceFeeds;
     uint64 sequenceNumber;
 
-    uint singleUpdateFee;
+    uint singleUpdateFeeInWei;
 
-    constructor(uint _singleUpdateFee) {
-        singleUpdateFee = _singleUpdateFee;
+    constructor(uint _singleUpdateFeeInWei) {
+        singleUpdateFeeInWei = _singleUpdateFeeInWei;
     }
 
     function queryPriceFeed(bytes32 id) public override view returns (PythStructs.PriceFeed memory priceFeed) {
@@ -59,7 +59,7 @@ contract MockPyth is AbstractPyth {
     }
 
     function getMinUpdateFee(uint updateDataSize) public override view returns (uint feeAmount) {
-        return singleUpdateFee * updateDataSize;
+        return singleUpdateFeeInWei * updateDataSize;
     }
 
     function createPriceFeedUpdateData(

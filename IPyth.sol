@@ -30,8 +30,8 @@ interface IPyth {
     /// @param sender Sender of this call (`msg.sender`).
     /// @param batchCount Number of batches that this function processed.
     /// @param requiredFee Required amount of fee for updating the prices.
-    /// @param payedFee The amount of fee that the sender payed for updating the prices.
-    event UpdatePriceFeeds(address indexed sender, uint batchCount, uint requiredFee, uint payedFee);
+    /// @param paidFee The amount of fee that the sender payed for updating the prices.
+    event UpdatePriceFeeds(address indexed sender, uint batchCount, uint requiredFee, uint paidFee);
 
 
     /// @notice Returns the current price and confidence interval.
@@ -52,15 +52,16 @@ interface IPyth {
     /// @return publishTime - the UNIX timestamp of when this price was computed.
     function getPrevPriceUnsafe(bytes32 id) external view returns (PythStructs.Price memory price, uint64 publishTime);
 
-    /// @notice Update price feeds with given update messages. You should pay a fee for updating the prices
-    /// on pyth, and you can get its amount by calling `getMinUpdateFee` method.
+    /// @notice Update price feeds with given update messages.
+    /// You should transfer some fee in Wei when calling this method; You can get its amount by calling `getMinUpdateFee`.
     /// Prices will be updated if they are more recent than the current stored prices.
     /// The call will succeed even if the update is not the most recent.
     /// @dev Reverts if the transferred fee is not sufficient or the updateData is invalid.
     /// @param updateData Array of price update data.
     function updatePriceFeeds(bytes[] memory updateData) external payable;
 
-    /// @notice Returns the needed fee to update an array of price updates.
+    /// @notice Returns the minimum required fee to update an array of price updates.
     /// @param updateDataSize Number of price updates.
+    /// @return feeAmount the minimum required fee in Wei.
     function getMinUpdateFee(uint updateDataSize) external view returns (uint feeAmount);
 }
