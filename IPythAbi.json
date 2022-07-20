@@ -99,6 +99,18 @@
         "internalType": "uint256",
         "name": "batchCount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "requiredFee",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "payedFee",
+        "type": "uint256"
       }
     ],
     "name": "UpdatePriceFeeds",

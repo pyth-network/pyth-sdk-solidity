@@ -29,7 +29,9 @@ interface IPyth {
     /// @dev Emitted when a call to `updatePriceFeeds` is processed successfully.
     /// @param sender Sender of this call (`msg.sender`).
     /// @param batchCount Number of batches that this function processed.
-    event UpdatePriceFeeds(address indexed sender, uint batchCount);
+    /// @param requiredFee Required amount of fee for updating the prices.
+    /// @param payedFee The amount of fee that the sender payed for updating the prices.
+    event UpdatePriceFeeds(address indexed sender, uint batchCount, uint requiredFee, uint payedFee);
 
 
     /// @notice Returns the current price and confidence interval.
