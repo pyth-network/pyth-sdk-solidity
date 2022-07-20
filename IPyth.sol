@@ -27,10 +27,10 @@ interface IPyth {
     event BatchPriceFeedUpdate(int8 chainId, uint64 sequenceNumber, uint batchSize, uint freshPricesInBatch);
 
     /// @dev Emitted when a call to `updatePriceFeeds` is processed successfully.
-    /// @param sender Sender of this call (`msg.sender`).
+    /// @param sender Sender of the call (`msg.sender`).
     /// @param batchCount Number of batches that this function processed.
     /// @param requiredFee Required amount of fee for updating the prices.
-    /// @param paidFee The amount of fee that the sender payed for updating the prices.
+    /// @param paidFee The amount of fee that the sender paid for updating the prices.
     event UpdatePriceFeeds(address indexed sender, uint batchCount, uint requiredFee, uint paidFee);
 
 
@@ -62,6 +62,6 @@ interface IPyth {
 
     /// @notice Returns the minimum required fee to update an array of price updates.
     /// @param updateDataSize Number of price updates.
-    /// @return feeAmount the minimum required fee in Wei.
+    /// @return feeAmount The minimum required fee in Wei.
     function getMinUpdateFee(uint updateDataSize) external view returns (uint feeAmount);
 }
