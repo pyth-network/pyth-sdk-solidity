@@ -7,12 +7,10 @@ import "./PythStructs.sol";
 contract MockPyth is AbstractPyth {
     mapping(bytes32 => PythStructs.PriceFeed) priceFeeds;
 
-    uint singleUpdateFeeInWei;
-    uint singleUpdateFeeInPythToken;
+    uint singleUpdateFee;
 
-    constructor(uint _singleUpdateFeeInWei, uint _singleUpdateFeeInPythToken) {
-        singleUpdateFeeInWei = _singleUpdateFeeInWei;
-        singleUpdateFeeInPythToken = _singleUpdateFeeInPythToken;
+    constructor(uint _singleUpdateFee) {
+        singleUpdateFee = _singleUpdateFee;
     }
 
     function queryPriceFeed(bytes32 id) public override view returns (PythStructs.PriceFeed memory priceFeed) {
@@ -22,19 +20,8 @@ contract MockPyth is AbstractPyth {
     // Takes an array of encoded price feeds and stores them.
     // You can create this data either by calling createPriceFeedData or
     // by using web3.js or ethers abi utilities.
-    function updatePriceFeeds(bytes[] memory updateData, uint feeAmount, bool feeUsingPythToken) public override payable {
-        require(feeAmount >= getMinUpdateFee(updateData.length, feeUsingPythToken), "Insufficient fee amount");
-
-        if (feeUsingPythToken) {
-            // It doesn't do the actual transfer here, to avoid extra dependency.
-            // SafeERC20.safeTransferFrom(IERC20(pythToken), msg.sender, address(this), feeAmount);
-        } else {
-            require(msg.value >= feeAmount , "Fee amount is bigger than the payed wei");
-
-            // Paying back the remaining amount to the sender.
-            uint rem = msg.value - feeAmount;
-            payable(msg.sender).transfer(rem);
-       }
+    function updatePriceFeeds(bytes[] memory updateData) public override payable {
+        require(msg.value >= getMinUpdateFee(updateData.length), "Insufficient fee amount");
 
         for(uint i = 0; i < updateData.length; i++) {
             PythStructs.PriceFeed memory priceFeed = abi.decode(updateData[i], (PythStructs.PriceFeed));
@@ -43,12 +30,8 @@ contract MockPyth is AbstractPyth {
         }
     }
 
-    function getMinUpdateFee(uint updateDataSize, bool feeUsingPythToken) public override view returns (uint feeAmount) {
-        if (feeUsingPythToken) {
-            return singleUpdateFeeInPythToken * updateDataSize;
-        } else {
-            return singleUpdateFeeInWei * updateDataSize;
-        }
+    function getMinUpdateFee(uint updateDataSize) public override view returns (uint feeAmount) {
+        return singleUpdateFee * updateDataSize;
     }
 
     function createPriceFeedUpdateData(

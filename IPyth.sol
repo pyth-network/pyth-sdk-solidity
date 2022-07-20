@@ -28,18 +28,15 @@ interface IPyth {
     /// @return publishTime - the UNIX timestamp of when this price was computed.
     function getPrevPriceUnsafe(bytes32 id) external view returns (PythStructs.Price memory price, uint64 publishTime);
 
-    /// @notice Update price feeds with given update messages if they are more recent than the current stored prices.
+    /// @notice Update price feeds with given update messages. You should pay a fee for updating the prices
+    /// on pyth, and you can get its amount by calling `getMinUpdateFee` method.
+    /// Prices will be updated if they are more recent than the current stored prices.
     /// The call will succeed even if the update is not the most recent.
-    /// @dev Reverts if the updateData is invalid.
+    /// @dev Reverts if the transferred fee is not sufficient or the updateData is invalid.
     /// @param updateData Array of price update data.
-    /// @param feeAmount Fee amount in Wei or Pyth token.
-    /// @param feeUsingPythToken True if fee is paid using Pyth Token and false if it's paid using the network's native currency.
-    function updatePriceFeeds(bytes[] memory updateData, uint feeAmount, bool feeUsingPythToken) external payable;
+    function updatePriceFeeds(bytes[] memory updateData) external payable;
 
     /// @notice Returns the needed fee to update an array of price updates.
-    /// @dev Reverts if the updateData is invalid.
     /// @param updateDataSize Number of price updates.
-    /// @param feeUsingPythToken True if fee is going to be paid using Pyth Token and false if it's going
-    /// to be paid using the network's native currency.
-    function getMinUpdateFee(uint updateDataSize, bool feeUsingPythToken) external view returns (uint feeAmount);
+    function getMinUpdateFee(uint updateDataSize) external view returns (uint feeAmount);
 }

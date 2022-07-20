@@ -96,11 +96,6 @@
         "internalType": "uint256",
         "name": "updateDataSize",
         "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "feeUsingPythToken",
-        "type": "bool"
       }
     ],
     "name": "getMinUpdateFee",
@@ -161,16 +156,6 @@
         "internalType": "bytes[]",
         "name": "updateData",
         "type": "bytes[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "feeAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "feeUsingPythToken",
-        "type": "bool"
       }
     ],
     "name": "updatePriceFeeds",
