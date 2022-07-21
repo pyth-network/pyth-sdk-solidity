@@ -4,9 +4,9 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "int8",
+        "internalType": "uint16",
         "name": "chainId",
-        "type": "int8"
+        "type": "uint16"
       },
       {
         "indexed": false,
@@ -47,9 +47,9 @@
       },
       {
         "indexed": false,
-        "internalType": "int8",
+        "internalType": "uint16",
         "name": "chainId",
-        "type": "int8"
+        "type": "uint16"
       },
       {
         "indexed": false,

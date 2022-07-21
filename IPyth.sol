@@ -17,14 +17,14 @@ interface IPyth {
     /// @param publishTime Publish time of the given price update.
     /// @param price Current price of the given price update.
     /// @param conf Current confidence interval of the given price update.
-    event PriceFeedUpdate(bytes32 indexed id, bool indexed fresh, int8 chainId, uint64 sequenceNumber, uint64 lastPublsihTime, uint64 publishTime, int64 price, uint64 conf);
+    event PriceFeedUpdate(bytes32 indexed id, bool indexed fresh, uint16 chainId, uint64 sequenceNumber, uint64 lastPublsihTime, uint64 publishTime, int64 price, uint64 conf);
 
     /// @dev Emitted when a batch price update is processed successfully.
     /// @param chainId ID of the source chain that the batch price update comes from.
     /// @param sequenceNumber Sequence number of the batch price update.
     /// @param batchSize Number of prices within the batch price update.
     /// @param freshPricesInBatch Number of prices that were more recent and were stored.
-    event BatchPriceFeedUpdate(int8 chainId, uint64 sequenceNumber, uint batchSize, uint freshPricesInBatch);
+    event BatchPriceFeedUpdate(uint16 chainId, uint64 sequenceNumber, uint batchSize, uint freshPricesInBatch);
 
     /// @dev Emitted when a call to `updatePriceFeeds` is processed successfully.
     /// @param sender Sender of the call (`msg.sender`).
