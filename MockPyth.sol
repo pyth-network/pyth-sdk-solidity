@@ -22,8 +22,9 @@ contract MockPyth is AbstractPyth {
     // You can create this data either by calling createPriceFeedData or
     // by using web3.js or ethers abi utilities.
     function updatePriceFeeds(bytes[] memory updateData) public override payable {
-        uint requiredFee = getMinUpdateFee(updateData.length);
-        require(msg.value >= requiredFee, "Insufficient fee amount");
+        uint requiredFee = getUpdateFee(updateData.length);
+        require(msg.value >= requiredFee, "Insufficient paid fee amount");
+        payable(msg.sender).transfer(msg.value - requiredFee);
 
         uint freshPrices = 0;
 
@@ -55,10 +56,10 @@ contract MockPyth is AbstractPyth {
         sequenceNumber += 1;
 
         // There is only 1 batch of prices
-        emit UpdatePriceFeeds(msg.sender, 1, requiredFee, msg.value);
+        emit UpdatePriceFeeds(msg.sender, 1, requiredFee);
     }
 
-    function getMinUpdateFee(uint updateDataSize) public override view returns (uint feeAmount) {
+    function getUpdateFee(uint updateDataSize) public override view returns (uint feeAmount) {
         return singleUpdateFeeInWei * updateDataSize;
     }
 

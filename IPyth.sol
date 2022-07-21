@@ -29,9 +29,8 @@ interface IPyth {
     /// @dev Emitted when a call to `updatePriceFeeds` is processed successfully.
     /// @param sender Sender of the call (`msg.sender`).
     /// @param batchCount Number of batches that this function processed.
-    /// @param requiredFee Required amount of fee for updating the prices.
-    /// @param paidFee The amount of fee that the sender paid for updating the prices.
-    event UpdatePriceFeeds(address indexed sender, uint batchCount, uint requiredFee, uint paidFee);
+    /// @param fee Amount of paid fee for updating the prices.
+    event UpdatePriceFeeds(address indexed sender, uint batchCount, uint fee);
 
 
     /// @notice Returns the current price and confidence interval.
@@ -53,15 +52,16 @@ interface IPyth {
     function getPrevPriceUnsafe(bytes32 id) external view returns (PythStructs.Price memory price, uint64 publishTime);
 
     /// @notice Update price feeds with given update messages.
-    /// You should transfer some fee in Wei when calling this method; You can get its amount by calling `getMinUpdateFee`.
+    /// This method requires the caller to pay a fee in wei; the required fee can be computed by calling
+    /// `getUpdateFee` with the length of the `updateData` array.
     /// Prices will be updated if they are more recent than the current stored prices.
     /// The call will succeed even if the update is not the most recent.
     /// @dev Reverts if the transferred fee is not sufficient or the updateData is invalid.
     /// @param updateData Array of price update data.
     function updatePriceFeeds(bytes[] memory updateData) external payable;
 
-    /// @notice Returns the minimum required fee to update an array of price updates.
+    /// @notice Returns the required fee to update an array of price updates.
     /// @param updateDataSize Number of price updates.
-    /// @return feeAmount The minimum required fee in Wei.
-    function getMinUpdateFee(uint updateDataSize) external view returns (uint feeAmount);
+    /// @return feeAmount The required fee in Wei.
+    function getUpdateFee(uint updateDataSize) external view returns (uint feeAmount);
 }
