@@ -13,11 +13,11 @@ interface IPyth {
     /// @param chainId ID of the source chain that the batch price update containing this price.
     /// This value comes from Wormhole, and you can find the corresponding chains at https://docs.wormholenetwork.com/wormhole/contracts.
     /// @param sequenceNumber Sequence number of the batch price update containing this price.
-    /// @param lastPublsihTime Publish time of the previously stored price.
+    /// @param lastPublishTime Publish time of the previously stored price.
     /// @param publishTime Publish time of the given price update.
     /// @param price Current price of the given price update.
     /// @param conf Current confidence interval of the given price update.
-    event PriceFeedUpdate(bytes32 indexed id, bool indexed fresh, uint16 chainId, uint64 sequenceNumber, uint64 lastPublsihTime, uint64 publishTime, int64 price, uint64 conf);
+    event PriceFeedUpdate(bytes32 indexed id, bool indexed fresh, uint16 chainId, uint64 sequenceNumber, uint64 lastPublishTime, uint64 publishTime, int64 price, uint64 conf);
 
     /// @dev Emitted when a batch price update is processed successfully.
     /// @param chainId ID of the source chain that the batch price update comes from.
@@ -31,7 +31,6 @@ interface IPyth {
     /// @param batchCount Number of batches that this function processed.
     /// @param fee Amount of paid fee for updating the prices.
     event UpdatePriceFeeds(address indexed sender, uint batchCount, uint fee);
-
 
     /// @notice Returns the current price and confidence interval.
     /// @dev Reverts if the current price is not available.

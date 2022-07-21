@@ -60,7 +60,7 @@
       {
         "indexed": false,
         "internalType": "uint64",
-        "name": "lastPublsihTime",
+        "name": "lastPublishTime",
         "type": "uint64"
       },
       {
