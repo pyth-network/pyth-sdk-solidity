@@ -30,7 +30,7 @@ contract MockPyth is AbstractPyth {
 
         // Chain ID is id of the source chain that the price update comes from. Since it is just a mock contract
         // We set it to 1.
-        int8 chainId = 1;
+        uint16 chainId = 1;
 
         for(uint i = 0; i < updateData.length; i++) {
             PythStructs.PriceFeed memory priceFeed = abi.decode(updateData[i], (PythStructs.PriceFeed));
