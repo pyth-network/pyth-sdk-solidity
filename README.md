@@ -67,7 +67,7 @@ You can find a list of available price feeds [here](https://pyth.network/develop
 
 ### ABIs
 
-When making changes to a contract, please make sure to update the ABI. You can update it using `npm run generate-abi` and it will update the ABI files in [abis](./abis) directory. If you create a new contract, you also need to add the contract name in [the ABI generation script](./scripts/generateAbi.js#L5) so the script create ABI file for that contract too.
+When making changes to a contract interface, please make sure to update the ABI files too. You can update it using `npm run generate-abi` and it will update the ABI files in [abis](./abis) directory. If you create a new contract, you also need to add the contract name in [the ABI generation script](./scripts/generateAbi.js#L5) so the script can create the ABI file for the new contract as well.
 
 ### Releases
 
