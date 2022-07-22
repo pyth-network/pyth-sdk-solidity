@@ -1,19 +1,26 @@
 const fs = require("fs");
 const solc = require("solc");
 
+// Assuming each contract is in the file with the same name.
+var contracts = ["IPyth", "AbstractPyth", "MockPyth"];
+
+var sources = {};
+var outputSelection = {};
+
+for (let contract of contracts) {
+  const contractFile = `${contract}.sol`;
+  sources[contractFile] = {
+    content: fs.readFileSync(contractFile).toString(),
+  };
+  outputSelection[contractFile] = {};
+  outputSelection[contractFile][contract] = ["abi"];
+}
+
 var input = {
   language: "Solidity",
-  sources: {
-    "IPyth.sol": {
-      content: fs.readFileSync("IPyth.sol").toString(),
-    },
-  },
+  sources,
   settings: {
-    outputSelection: {
-      "IPyth.sol": {
-        IPyth: ["abi"],
-      },
-    },
+    outputSelection,
   },
 };
 
@@ -26,6 +33,17 @@ function findImports(path) {
 const output = JSON.parse(
   solc.compile(JSON.stringify(input), { import: findImports })
 );
-const abi = output.contracts["IPyth.sol"].IPyth.abi;
 
-fs.writeFileSync("IPythAbi.json", JSON.stringify(abi, null, 2) + "\n");
+if (!fs.existsSync("abis")) {
+  fs.mkdirSync("abis");
+}
+
+for (let contract of contracts) {
+  const contractFile = `${contract}.sol`;
+
+  const abi = output.contracts[contractFile][contract].abi;
+  fs.writeFileSync(
+    `abis/${contract}.json`,
+    JSON.stringify(abi, null, 2) + "\n"
+  );
+}

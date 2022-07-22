@@ -20,4 +20,4 @@ jobs:
       - name: Check ABI changes
         # Fails if the ABI files are not up to date. Please use npm run generate-abi to regenerate the ABI files for
         # the current version of the contracts.
-        run: git diff --exit-code IPythAbi.json
+        run: git diff --exit-code abis/*
