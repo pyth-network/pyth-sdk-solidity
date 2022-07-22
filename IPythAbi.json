@@ -99,6 +99,12 @@
         "internalType": "uint256",
         "name": "batchCount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fee",
+        "type": "uint256"
       }
     ],
     "name": "UpdatePriceFeeds",
@@ -220,6 +226,25 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "updateDataSize",
+        "type": "uint256"
+      }
+    ],
+    "name": "getUpdateFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "feeAmount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes[]",
         "name": "updateData",
         "type": "bytes[]"
@@ -227,7 +252,7 @@
     ],
     "name": "updatePriceFeeds",
     "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   }
 ]

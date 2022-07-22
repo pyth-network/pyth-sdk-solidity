@@ -8,6 +8,12 @@ contract MockPyth is AbstractPyth {
     mapping(bytes32 => PythStructs.PriceFeed) priceFeeds;
     uint64 sequenceNumber;
 
+    uint singleUpdateFeeInWei;
+
+    constructor(uint _singleUpdateFeeInWei) {
+        singleUpdateFeeInWei = _singleUpdateFeeInWei;
+    }
+
     function queryPriceFeed(bytes32 id) public override view returns (PythStructs.PriceFeed memory priceFeed) {
         return priceFeeds[id];
     }
@@ -15,7 +21,11 @@ contract MockPyth is AbstractPyth {
     // Takes an array of encoded price feeds and stores them.
     // You can create this data either by calling createPriceFeedData or
     // by using web3.js or ethers abi utilities.
-    function updatePriceFeeds(bytes[] memory updateData) public override {
+    function updatePriceFeeds(bytes[] memory updateData) public override payable {
+        uint requiredFee = getUpdateFee(updateData.length);
+        require(msg.value >= requiredFee, "Insufficient paid fee amount");
+        payable(msg.sender).transfer(msg.value - requiredFee);
+
         uint freshPrices = 0;
 
         // Chain ID is id of the source chain that the price update comes from. Since it is just a mock contract
@@ -46,7 +56,11 @@ contract MockPyth is AbstractPyth {
         sequenceNumber += 1;
 
         // There is only 1 batch of prices
-        emit UpdatePriceFeeds(msg.sender, 1);
+        emit UpdatePriceFeeds(msg.sender, 1, requiredFee);
+    }
+
+    function getUpdateFee(uint updateDataSize) public override view returns (uint feeAmount) {
+        return singleUpdateFeeInWei * updateDataSize;
     }
 
     function createPriceFeedUpdateData(

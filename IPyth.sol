@@ -27,9 +27,10 @@ interface IPyth {
     event BatchPriceFeedUpdate(int8 chainId, uint64 sequenceNumber, uint batchSize, uint freshPricesInBatch);
 
     /// @dev Emitted when a call to `updatePriceFeeds` is processed successfully.
-    /// @param sender Sender of this call (`msg.sender`).
+    /// @param sender Sender of the call (`msg.sender`).
     /// @param batchCount Number of batches that this function processed.
-    event UpdatePriceFeeds(address indexed sender, uint batchCount);
+    /// @param fee Amount of paid fee for updating the prices.
+    event UpdatePriceFeeds(address indexed sender, uint batchCount, uint fee);
 
 
     /// @notice Returns the current price and confidence interval.
@@ -50,8 +51,17 @@ interface IPyth {
     /// @return publishTime - the UNIX timestamp of when this price was computed.
     function getPrevPriceUnsafe(bytes32 id) external view returns (PythStructs.Price memory price, uint64 publishTime);
 
-    /// @notice Update price feeds with given update messages if they are more recent than the current stored prices.
+    /// @notice Update price feeds with given update messages.
+    /// This method requires the caller to pay a fee in wei; the required fee can be computed by calling
+    /// `getUpdateFee` with the length of the `updateData` array.
+    /// Prices will be updated if they are more recent than the current stored prices.
     /// The call will succeed even if the update is not the most recent.
-    /// @dev Reverts if the updateData is invalid.
-    function updatePriceFeeds(bytes[] memory updateData) external;
+    /// @dev Reverts if the transferred fee is not sufficient or the updateData is invalid.
+    /// @param updateData Array of price update data.
+    function updatePriceFeeds(bytes[] memory updateData) external payable;
+
+    /// @notice Returns the required fee to update an array of price updates.
+    /// @param updateDataSize Number of price updates.
+    /// @return feeAmount The required fee in Wei.
+    function getUpdateFee(uint updateDataSize) external view returns (uint feeAmount);
 }
