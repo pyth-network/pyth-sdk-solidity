@@ -44,11 +44,26 @@ interface IPyth {
     /// @return price - please read the documentation of PythStructs.Price to understand how to use this safely.
     function getEmaPrice(bytes32 id) external view returns (PythStructs.Price memory price);
 
-    /// @notice Returns the most recent previous price with a status of Trading, with the time when this was published.
-    /// @dev This may be a price from arbitrarily far in the past: it is important that you check the publish time before using the price.
+    /// @notice Returns the latest available price, along with the timestamp when it was generated.
+    /// @dev This function returns the same price as `getCurrentPrice` in the case where a price was available
+    /// at the time this `PriceFeed` was published (`publish_time`). However, if a price was not available
+    /// at that time, this function returns the price from the latest time at which the price was available.
+    ///
+    /// The returned price can be from arbitrarily far in the past; this function makes no guarantees that
+    /// the returned price is recent or useful for any particular application.
+    ///
+    /// Users of this function should check the returned timestamp to ensure that the returned price is
+    /// sufficiently recent for their application. If you are considering using this function, it may be
+    /// safer / easier to use either `getCurrentPrice` or `getLatestAvailablePriceWithinDuration`.
     /// @return price - please read the documentation of PythStructs.Price to understand how to use this safely.
     /// @return publishTime - the UNIX timestamp of when this price was computed.
-    function getPrevPriceUnsafe(bytes32 id) external view returns (PythStructs.Price memory price, uint64 publishTime);
+    function getLatestAvailablePriceUnsafe(bytes32 id) external view returns (PythStructs.Price memory price, uint64 publishTime);
+
+    /// @notice Returns the latest price as long as it was updated within `duration` seconds of the current time.
+    /// @dev This function is a sanity-checked version of `getLatestAvailablePriceUnchecked` which is useful in
+    /// applications that require a sufficiently-recent price. Reverts if the price wasn't updated sufficiently
+    /// recently.
+    function getLatestAvailablePriceWithinDuration(bytes32 id, uint64 duration) external view returns (PythStructs.Price memory price);
 
     /// @notice Update price feeds with given update messages.
     /// This method requires the caller to pay a fee in wei; the required fee can be computed by calling
@@ -58,6 +73,7 @@ interface IPyth {
     /// @dev Reverts if the transferred fee is not sufficient or the updateData is invalid.
     /// @param updateData Array of price update data.
     function updatePriceFeeds(bytes[] memory updateData) external payable;
+
 
     /// @notice Returns the required fee to update an array of price updates.
     /// @param updateDataSize Number of price updates.
