@@ -59,4 +59,22 @@ abstract contract AbstractPyth is IPyth {
             return y - x;
         }
     }
+
+    // Changing modifier to public to be able to call it locally.
+    function updatePriceFeeds(bytes[] memory updateData) public virtual payable override;
+
+    function updatePriceFeedsIfNeeded(bytes[] memory updateData, bytes32[] memory priceIds, uint64[] memory publishTimes) external payable {
+        require(priceIds.length == publishTimes.length, "priceIds and publishTimes arrays should have same length");
+
+        bool updateNeeded = false;
+        for(uint i = 0; i < priceIds.length; i++) {
+            if (queryPriceFeed(priceIds[i]).publishTime <= publishTimes[i]) {
+                updateNeeded = true;
+            }
+        }
+
+        require(updateNeeded, "All the prices have been updated, no update needed");
+
+        updatePriceFeeds(updateData);
+    }
 }

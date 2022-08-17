@@ -295,5 +295,28 @@
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "updateData",
+        "type": "bytes[]"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "priceIds",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "uint64[]",
+        "name": "publishTimes",
+        "type": "uint64[]"
+      }
+    ],
+    "name": "updatePriceFeedsIfNeeded",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
   }
 ]
