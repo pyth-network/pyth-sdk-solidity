@@ -74,20 +74,17 @@ interface IPyth {
     /// @param updateData Array of price update data.
     function updatePriceFeeds(bytes[] memory updateData) external payable;
 
-    /// @notice Wrapper around updatePriceFeeds that rejects fast if a price update is not needed based on the
-    /// sender known latest publish time of prices that it wants to update. This method rejects solely based on
-    /// given `publishTimes` for the price feeds. It means that the prices has been updated since the sender
-    /// observed the price latest publish time. However, `updateData` might still be a newer update. If you
-    /// want to update the contract price to the latest available price, please use `updatePriceFeeds` and
-    /// do not call this method.
+    /// @notice Wrapper around updatePriceFeeds that rejects fast if a price update is not necessary. A price update is
+    /// necessary if the current on-chain publishTime is older than the given publishTime. It relies solely on the
+    /// given `publishTimes` for the price feeds and does not read the actual price update publish time within `updateData`.
     ///
     /// This method requires the caller to pay a fee in wei; the required fee can be computed by calling
     /// `getUpdateFee` with the length of the `updateData` array.
     ///
     /// `priceIds` and `publishTimes` are two arrays with the same size that correspond to senders known publishTime
     /// of each priceId when calling this method. If all of price feeds within `priceIds` have updated and have
-    /// a newer publishTime it will reject the transaction to save gas. Otherwise, it calls updatePriceFeeds method to
-    /// update the prices.
+    /// a newer or equal publish time than the given publish time, it will reject the transaction to save gas.
+    /// Otherwise, it calls updatePriceFeeds method to update the prices.
     ///
     /// @dev Reverts if update is not needed or the transferred fee is not sufficient or the updateData is invalid.
     /// @param updateData Array of price update data.

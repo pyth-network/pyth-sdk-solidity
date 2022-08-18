@@ -68,7 +68,7 @@ abstract contract AbstractPyth is IPyth {
 
         bool updateNeeded = false;
         for(uint i = 0; i < priceIds.length; i++) {
-            if (queryPriceFeed(priceIds[i]).publishTime <= publishTimes[i]) {
+            if (queryPriceFeed(priceIds[i]).publishTime < publishTimes[i]) {
                 updateNeeded = true;
             }
         }
