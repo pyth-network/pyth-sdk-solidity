@@ -485,7 +485,7 @@
         "type": "uint64[]"
       }
     ],
-    "name": "updatePriceFeedsIfNeeded",
+    "name": "updatePriceFeedsIfNecessary",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
