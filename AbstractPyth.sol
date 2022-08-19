@@ -60,7 +60,7 @@ abstract contract AbstractPyth is IPyth {
         }
     }
 
-    // Changing modifier to public to be able to call it locally.
+    // Access modifier is overridden to public to be able to call it locally.
     function updatePriceFeeds(bytes[] memory updateData) public virtual payable override;
 
     function updatePriceFeedsIfNeeded(bytes[] memory updateData, bytes32[] memory priceIds, uint64[] memory publishTimes) external payable {
