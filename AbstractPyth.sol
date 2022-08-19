@@ -6,8 +6,8 @@ import "./IPyth.sol";
 
 abstract contract AbstractPyth is IPyth {
     /// @notice Returns the price feed with given id.
-    /// @dev Reverts if the price does not exists.
-    /// @param id The Pyth Price Feed ID of which to fetch the price feed.
+    /// @dev Reverts if the price does not exist.
+    /// @param id The Pyth Price Feed ID of which to fetch the current price and confidence interval.
     function queryPriceFeed(bytes32 id) public view virtual returns (PythStructs.PriceFeed memory priceFeed);
 
     function getCurrentPrice(bytes32 id) external view override returns (PythStructs.Price memory price) {
@@ -70,13 +70,7 @@ abstract contract AbstractPyth is IPyth {
 
         bool updateNeeded = false;
         for(uint i = 0; i < priceIds.length; i++) {
-            try {
-                if (queryPriceFeed(priceIds[i]).publishTime < publishTimes[i]) {
-                    updateNeeded = true;
-                }
-            } catch Error(string memory reason) {
-                // If the price does not exist yet queryPriceFeed will revert.
-                // However, we want to update the price in this case.
+            if (queryPriceFeed(priceIds[i]).publishTime < publishTimes[i]) {
                 updateNeeded = true;
             }
         }
