@@ -90,7 +90,7 @@ interface IPyth {
     /// @param updateData Array of price update data.
     /// @param priceIds Array of price ids.
     /// @param publishTimes Array of publishTimes. `publishTimes[i]` corresponds to known `publishTime` of `priceIds[i]`
-    function updatePriceFeedsIfNeeded(bytes[] memory updateData, bytes32[] memory priceIds, uint64[] memory publishTimes) external payable;
+    function updatePriceFeedsIfNecessary(bytes[] memory updateData, bytes32[] memory priceIds, uint64[] memory publishTimes) external payable;
 
     /// @notice Returns the required fee to update an array of price updates.
     /// @param updateDataSize Number of price updates.
