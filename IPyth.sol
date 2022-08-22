@@ -74,6 +74,23 @@ interface IPyth {
     /// @param updateData Array of price update data.
     function updatePriceFeeds(bytes[] memory updateData) external payable;
 
+    /// @notice Wrapper around updatePriceFeeds that rejects fast if a price update is not necessary. A price update is
+    /// necessary if the current on-chain publishTime is older than the given publishTime. It relies solely on the
+    /// given `publishTimes` for the price feeds and does not read the actual price update publish time within `updateData`.
+    ///
+    /// This method requires the caller to pay a fee in wei; the required fee can be computed by calling
+    /// `getUpdateFee` with the length of the `updateData` array.
+    ///
+    /// `priceIds` and `publishTimes` are two arrays with the same size that correspond to senders known publishTime
+    /// of each priceId when calling this method. If all of price feeds within `priceIds` have updated and have
+    /// a newer or equal publish time than the given publish time, it will reject the transaction to save gas.
+    /// Otherwise, it calls updatePriceFeeds method to update the prices.
+    ///
+    /// @dev Reverts if update is not needed or the transferred fee is not sufficient or the updateData is invalid.
+    /// @param updateData Array of price update data.
+    /// @param priceIds Array of price ids.
+    /// @param publishTimes Array of publishTimes. `publishTimes[i]` corresponds to known `publishTime` of `priceIds[i]`
+    function updatePriceFeedsIfNecessary(bytes[] memory updateData, bytes32[] memory priceIds, uint64[] memory publishTimes) external payable;
 
     /// @notice Returns the required fee to update an array of price updates.
     /// @param updateDataSize Number of price updates.

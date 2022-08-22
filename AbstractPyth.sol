@@ -5,7 +5,9 @@ import "./PythStructs.sol";
 import "./IPyth.sol";
 
 abstract contract AbstractPyth is IPyth {
-
+    /// @notice Returns the price feed with given id.
+    /// @dev Reverts if the price does not exist.
+    /// @param id The Pyth Price Feed ID of which to fetch the current price and confidence interval.
     function queryPriceFeed(bytes32 id) public view virtual returns (PythStructs.PriceFeed memory priceFeed);
 
     function getCurrentPrice(bytes32 id) external view override returns (PythStructs.Price memory price) {
@@ -58,5 +60,23 @@ abstract contract AbstractPyth is IPyth {
         } else {
             return y - x;
         }
+    }
+
+    // Access modifier is overridden to public to be able to call it locally.
+    function updatePriceFeeds(bytes[] memory updateData) public virtual payable override;
+
+    function updatePriceFeedsIfNecessary(bytes[] memory updateData, bytes32[] memory priceIds, uint64[] memory publishTimes) external payable override {
+        require(priceIds.length == publishTimes.length, "priceIds and publishTimes arrays should have same length");
+
+        bool updateNeeded = false;
+        for(uint i = 0; i < priceIds.length; i++) {
+            if (queryPriceFeed(priceIds[i]).publishTime < publishTimes[i]) {
+                updateNeeded = true;
+            }
+        }
+
+        require(updateNeeded, "no prices in the submitted batch have fresh prices, so this update will have no effect");
+
+        updatePriceFeeds(updateData);
     }
 }

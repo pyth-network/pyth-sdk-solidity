@@ -15,6 +15,7 @@ contract MockPyth is AbstractPyth {
     }
 
     function queryPriceFeed(bytes32 id) public override view returns (PythStructs.PriceFeed memory priceFeed) {
+        require(priceFeeds[id].id != 0, "no price feed found for the given price id");
         return priceFeeds[id];
     }
 
