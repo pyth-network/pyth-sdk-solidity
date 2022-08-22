@@ -75,7 +75,7 @@ abstract contract AbstractPyth is IPyth {
             }
         }
 
-        require(updateNeeded, "All the prices have been updated, no update needed");
+        require(updateNeeded, "no prices in the submitted batch have fresh prices, so this update will have no effect");
 
         updatePriceFeeds(updateData);
     }
