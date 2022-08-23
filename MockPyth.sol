@@ -28,7 +28,7 @@ contract MockPyth is AbstractPyth {
 
         if (msg.value > requiredFee) {
             (bool success, ) = payable(msg.sender).call{value: msg.value - requiredFee}("");
-            require(success, "Failed to transfer additional amount.");
+            require(success, "failed to transfer update fee");
         }
 
         uint freshPrices = 0;
