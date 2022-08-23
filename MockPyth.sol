@@ -22,10 +22,14 @@ contract MockPyth is AbstractPyth {
     // Takes an array of encoded price feeds and stores them.
     // You can create this data either by calling createPriceFeedData or
     // by using web3.js or ethers abi utilities.
-    function updatePriceFeeds(bytes[] memory updateData) public override payable {
+    function updatePriceFeeds(bytes[] calldata updateData) public override payable {
         uint requiredFee = getUpdateFee(updateData.length);
         require(msg.value >= requiredFee, "Insufficient paid fee amount");
-        payable(msg.sender).transfer(msg.value - requiredFee);
+        
+        if (msg.value > requiredFee) {
+            (bool success, ) = payable(msg.sender).call{value: msg.value - requiredFee}("");
+            require(success, "Failed to transfer additional amount.");
+        }
 
         uint freshPrices = 0;
 

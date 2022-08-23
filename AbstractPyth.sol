@@ -54,7 +54,7 @@ abstract contract AbstractPyth is IPyth {
         return price;
     }
 
-    function diff(uint x, uint y) private pure returns (uint) {
+    function diff(uint x, uint y) internal pure returns (uint) {
         if (x > y) {
             return x - y;
         } else {
@@ -63,9 +63,9 @@ abstract contract AbstractPyth is IPyth {
     }
 
     // Access modifier is overridden to public to be able to call it locally.
-    function updatePriceFeeds(bytes[] memory updateData) public virtual payable override;
+    function updatePriceFeeds(bytes[] calldata updateData) public virtual payable override;
 
-    function updatePriceFeedsIfNecessary(bytes[] memory updateData, bytes32[] memory priceIds, uint64[] memory publishTimes) external payable override {
+    function updatePriceFeedsIfNecessary(bytes[] calldata updateData, bytes32[] calldata priceIds, uint64[] calldata publishTimes) external payable override {
         require(priceIds.length == publishTimes.length, "priceIds and publishTimes arrays should have same length");
 
         bool updateNeeded = false;

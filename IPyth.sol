@@ -72,7 +72,7 @@ interface IPyth {
     /// The call will succeed even if the update is not the most recent.
     /// @dev Reverts if the transferred fee is not sufficient or the updateData is invalid.
     /// @param updateData Array of price update data.
-    function updatePriceFeeds(bytes[] memory updateData) external payable;
+    function updatePriceFeeds(bytes[] calldata updateData) external payable;
 
     /// @notice Wrapper around updatePriceFeeds that rejects fast if a price update is not necessary. A price update is
     /// necessary if the current on-chain publishTime is older than the given publishTime. It relies solely on the
@@ -90,7 +90,7 @@ interface IPyth {
     /// @param updateData Array of price update data.
     /// @param priceIds Array of price ids.
     /// @param publishTimes Array of publishTimes. `publishTimes[i]` corresponds to known `publishTime` of `priceIds[i]`
-    function updatePriceFeedsIfNecessary(bytes[] memory updateData, bytes32[] memory priceIds, uint64[] memory publishTimes) external payable;
+    function updatePriceFeedsIfNecessary(bytes[] calldata updateData, bytes32[] calldata priceIds, uint64[] calldata publishTimes) external payable;
 
     /// @notice Returns the required fee to update an array of price updates.
     /// @param updateDataSize Number of price updates.
