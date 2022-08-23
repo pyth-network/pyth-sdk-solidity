@@ -308,7 +308,7 @@
     "outputs": [
       {
         "internalType": "bool",
-        "name": "",
+        "name": "exists",
         "type": "bool"
       }
     ],
