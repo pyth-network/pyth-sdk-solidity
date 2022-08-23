@@ -25,7 +25,7 @@ contract MockPyth is AbstractPyth {
     function updatePriceFeeds(bytes[] calldata updateData) public override payable {
         uint requiredFee = getUpdateFee(updateData.length);
         require(msg.value >= requiredFee, "Insufficient paid fee amount");
-        
+
         if (msg.value > requiredFee) {
             (bool success, ) = payable(msg.sender).call{value: msg.value - requiredFee}("");
             require(success, "Failed to transfer additional amount.");
