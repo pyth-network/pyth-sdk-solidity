@@ -10,14 +10,19 @@ abstract contract AbstractPyth is IPyth {
     /// @param id The Pyth Price Feed ID of which to fetch the current price and confidence interval.
     function queryPriceFeed(bytes32 id) public view virtual returns (PythStructs.PriceFeed memory priceFeed);
 
+    /// @notice Returns true if a price feed with the given id exists.
+    /// @param id The Pyth Price Feed ID of which to check its existence.
+    function priceFeedExists(bytes32 id) public view virtual returns (bool exists);
+
+    /// @notice Returns the period (in seconds) that a price feed is considered valid since its publish time
+    function getValidTimePeriod() public view virtual returns (uint validTimePeriod);
+
     function getCurrentPrice(bytes32 id) external view override returns (PythStructs.Price memory price) {
-        PythStructs.PriceFeed memory priceFeed = queryPriceFeed(id);
+        uint64 publishTime;
+        (price, publishTime) = getLatestAvailablePriceUnsafe(id);
 
-        require(priceFeed.status == PythStructs.PriceStatus.TRADING, "current price unavailable");
+        require(diff(block.timestamp, publishTime) <= getValidTimePeriod(), "current price unavailable");
 
-        price.price = priceFeed.price;
-        price.conf = priceFeed.conf;
-        price.expo = priceFeed.expo;
         return price;
     }
 
@@ -70,7 +75,7 @@ abstract contract AbstractPyth is IPyth {
 
         bool updateNeeded = false;
         for(uint i = 0; i < priceIds.length; i++) {
-            if (queryPriceFeed(priceIds[i]).publishTime < publishTimes[i]) {
+            if (!priceFeedExists(priceIds[i]) || queryPriceFeed(priceIds[i]).publishTime < publishTimes[i]) {
                 updateNeeded = true;
             }
         }
