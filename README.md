@@ -1,7 +1,7 @@
 # Pyth Solidity SDK
 
-This package provides utilities for consuming prices from the [Pyth Network](https://pyth.network/) Oracle using Solidity. Also, it contains [the Pyth Interface ABI](./IPythAbi.json) that you can use in your libraries
-to communicate with the contract.
+This package provides utilities for consuming prices from the [Pyth Network](https://pyth.network/) Oracle using Solidity. Also, it contains [the Pyth Interface ABI](./abis/IPyth.json) that you can use in your libraries
+to communicate with the Pyth contract.
 
 It is **strongly recommended** to follow the [consumer best practices](https://docs.pyth.network/consumers/best-practices) when consuming Pyth data.
 
