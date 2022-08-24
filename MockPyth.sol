@@ -9,14 +9,24 @@ contract MockPyth is AbstractPyth {
     uint64 sequenceNumber;
 
     uint singleUpdateFeeInWei;
+    uint validTimePeriod;
 
-    constructor(uint _singleUpdateFeeInWei) {
+    constructor(uint _validTimePeriod, uint _singleUpdateFeeInWei) {
         singleUpdateFeeInWei = _singleUpdateFeeInWei;
+        validTimePeriod = _validTimePeriod;
     }
 
     function queryPriceFeed(bytes32 id) public override view returns (PythStructs.PriceFeed memory priceFeed) {
         require(priceFeeds[id].id != 0, "no price feed found for the given price id");
         return priceFeeds[id];
+    }
+
+    function priceFeedExists(bytes32 id) public override view returns (bool) {
+        return (priceFeeds[id].id != 0);
+    }
+
+    function getValidTimePeriod() public override view returns (uint) {
+        return validTimePeriod;
     }
 
     // Takes an array of encoded price feeds and stores them.
