@@ -33,7 +33,7 @@ interface IPyth {
     event UpdatePriceFeeds(address indexed sender, uint batchCount, uint fee);
 
     /// @notice Returns the price and confidence interval.
-    /// @dev Reverts if the price is not available.
+    /// @dev Reverts if the price has not been updated within the last `getValidTimePeriod()` seconds.
     /// @param id The Pyth Price Feed ID of which to fetch the price and confidence interval.
     /// @return price - please read the documentation of PythStructs.Price to understand how to use this safely.
     function getPrice(bytes32 id) external view returns (PythStructs.Price memory price);
@@ -45,11 +45,8 @@ interface IPyth {
     function getEmaPrice(bytes32 id) external view returns (PythStructs.Price memory price);
 
     /// @notice Returns the price of a price feed without any sanity checks.
-    /// @dev This function returns the same price as `getPrice` in the case where the price is available.
-    /// However, if the price is not recent this function returns the latest available price.
-    ///
-    /// The returned price can be from arbitrarily far in the past; this function makes no guarantees that
-    /// the returned price is recent or useful for any particular application.
+    /// @dev This function returns the most recent price update in this contract without any recency checks.
+    /// This function is unsafe as the returned price update may be arbitrarily far in the past.
     ///
     /// Users of this function should check the `publishTime` in the price to ensure that the returned price is
     /// sufficiently recent for their application. If you are considering using this function, it may be
