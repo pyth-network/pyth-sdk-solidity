@@ -32,6 +32,9 @@ interface IPyth {
     /// @param fee Amount of paid fee for updating the prices.
     event UpdatePriceFeeds(address indexed sender, uint batchCount, uint fee);
 
+    /// @notice Returns the period (in seconds) that a price feed is considered valid since its publish time
+    function getValidTimePeriod() external view returns (uint validTimePeriod);
+
     /// @notice Returns the price and confidence interval.
     /// @dev Reverts if the price has not been updated within the last `getValidTimePeriod()` seconds.
     /// @param id The Pyth Price Feed ID of which to fetch the price and confidence interval.

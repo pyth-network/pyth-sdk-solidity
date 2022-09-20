@@ -386,6 +386,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getValidTimePeriod",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "validTimePeriod",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "bytes[]",

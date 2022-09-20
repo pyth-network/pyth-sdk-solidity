@@ -14,7 +14,6 @@ abstract contract AbstractPyth is IPyth {
     /// @param id The Pyth Price Feed ID of which to check its existence.
     function priceFeedExists(bytes32 id) public view virtual returns (bool exists);
 
-    /// @notice Returns the period (in seconds) that a price feed is considered valid since its publish time
     function getValidTimePeriod() public view virtual returns (uint validTimePeriod);
 
     function getPrice(bytes32 id) external view override returns (PythStructs.Price memory price) {
