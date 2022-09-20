@@ -44,15 +44,15 @@ interface IPyth {
     /// @return price - please read the documentation of PythStructs.Price to understand how to use this safely.
     function getEmaPrice(bytes32 id) external view returns (PythStructs.Price memory price);
 
-    /// @notice Returns the latest available price, along with the timestamp when it was generated.
+    /// @notice Returns the latest available price.
     /// @dev This function returns the same price as `getCurrentPrice` in the case where a price was available
-    /// at the time this `PriceFeed` was published (`publish_time`). However, if a price was not available
+    /// at the time this `PriceFeed` was published (`publishTime`). However, if a price was not available
     /// at that time, this function returns the price from the latest time at which the price was available.
     ///
     /// The returned price can be from arbitrarily far in the past; this function makes no guarantees that
     /// the returned price is recent or useful for any particular application.
     ///
-    /// Users of this function should check the returned timestamp to ensure that the returned price is
+    /// Users of this function should check the `publishTime` in the price to ensure that the returned price is
     /// sufficiently recent for their application. If you are considering using this function, it may be
     /// safer / easier to use either `getCurrentPrice` or `getLatestAvailablePriceWithinDuration`.
     /// @return price - please read the documentation of PythStructs.Price to understand how to use this safely.
