@@ -15,7 +15,7 @@ npm install @pythnetwork/pyth-sdk-solidity
 
 To consume prices you should use the [`IPyth`](IPyth.sol) interface. Please make sure to read the documentation of this interface in order to use the prices safely.
 
-For example, to read the latest price, call [`getCurrentPrice`](IPyth.sol) with the Price ID of the price feed you're interested in. The price feeds available on each chain are listed [below](#target-chains).
+For example, to read the latest price, call [`getPrice`](IPyth.sol) with the Price ID of the price feed you're interested in. The price feeds available on each chain are listed [below](#target-chains).
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -38,7 +38,7 @@ contract ExampleContract {
         pyth.updatePriceFeeds(priceUpdateData);
 
         bytes32 priceID = 0xf9c0172ba10dfa4d19088d94f5bf61d3b54d5bd7483a322a982e1373ee8ea31b;
-        return pyth.getCurrentPrice(priceID);
+        return pyth.getPrice(priceID);
     }
 }
 ```

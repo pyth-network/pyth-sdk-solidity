@@ -7,7 +7,7 @@ import "./IPyth.sol";
 abstract contract AbstractPyth is IPyth {
     /// @notice Returns the price feed with given id.
     /// @dev Reverts if the price does not exist.
-    /// @param id The Pyth Price Feed ID of which to fetch the current price and confidence interval.
+    /// @param id The Pyth Price Feed ID of which to fetch the PriceFeed.
     function queryPriceFeed(bytes32 id) public view virtual returns (PythStructs.PriceFeed memory priceFeed);
 
     /// @notice Returns true if a price feed with the given id exists.

@@ -15,8 +15,8 @@ interface IPyth {
     /// @param sequenceNumber Sequence number of the batch price update containing this price.
     /// @param lastPublishTime Publish time of the previously stored price.
     /// @param publishTime Publish time of the given price update.
-    /// @param price Current price of the given price update.
-    /// @param conf Current confidence interval of the given price update.
+    /// @param price Price of the given price update.
+    /// @param conf Confidence interval of the given price update.
     event PriceFeedUpdate(bytes32 indexed id, bool indexed fresh, uint16 chainId, uint64 sequenceNumber, uint lastPublishTime, uint publishTime, int64 price, uint64 conf);
 
     /// @dev Emitted when a batch price update is processed successfully.
@@ -39,8 +39,8 @@ interface IPyth {
     function getPrice(bytes32 id) external view returns (PythStructs.Price memory price);
 
     /// @notice Returns the exponentially-weighted moving average price and confidence interval.
-    /// @dev Reverts if the exponential-weighted moving average price is not available.
-    /// @param id The Pyth Price Feed ID of which to fetch the current price and confidence interval.
+    /// @dev Reverts if the EMA price is not available.
+    /// @param id The Pyth Price Feed ID of which to fetch the EMA price and confidence interval.
     /// @return price - please read the documentation of PythStructs.Price to understand how to use this safely.
     function getEmaPrice(bytes32 id) external view returns (PythStructs.Price memory price);
 
