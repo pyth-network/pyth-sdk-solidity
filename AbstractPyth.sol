@@ -17,27 +17,40 @@ abstract contract AbstractPyth is IPyth {
     /// @notice Returns the period (in seconds) that a price feed is considered valid since its publish time
     function getValidTimePeriod() public view virtual returns (uint validTimePeriod);
 
-    function getCurrentPrice(bytes32 id) external view override returns (PythStructs.Price memory price) {
-        return getLatestAvailablePriceWithinDuration(id, getValidTimePeriod());
+    function getPrice(bytes32 id) external view override returns (PythStructs.Price memory price) {
+        return getPriceNoOlderThan(id, getValidTimePeriod());
     }
 
     function getEmaPrice(bytes32 id) external view override returns (PythStructs.Price memory price) {
-        PythStructs.PriceFeed memory priceFeed = queryPriceFeed(id);
-        return priceFeed.emaPrice;
+        return getEmaPriceNoOlderThan(id, getValidTimePeriod());
     }
 
-    function getLatestAvailablePriceUnsafe(bytes32 id) public view override returns (PythStructs.Price memory price) {
+    function getPriceUnsafe(bytes32 id) public view override returns (PythStructs.Price memory price) {
         PythStructs.PriceFeed memory priceFeed = queryPriceFeed(id);
         return priceFeed.price;
     }
 
-    function getLatestAvailablePriceWithinDuration(bytes32 id, uint duration) public view override returns (PythStructs.Price memory price) {
-        price = getLatestAvailablePriceUnsafe(id);
+    function getPriceNoOlderThan(bytes32 id, uint age) public view override returns (PythStructs.Price memory price) {
+        price = getPriceUnsafe(id);
 
-        require(diff(block.timestamp, price.publishTime) <= duration, "no price available which is recent enough");
+        require(diff(block.timestamp, price.publishTime) <= age, "no price available which is recent enough");
 
         return price;
     }
+
+    function getEmaPriceUnsafe(bytes32 id) public view override returns (PythStructs.Price memory price) {
+        PythStructs.PriceFeed memory priceFeed = queryPriceFeed(id);
+        return priceFeed.emaPrice;
+    }
+
+    function getEmaPriceNoOlderThan(bytes32 id, uint age) public view override returns (PythStructs.Price memory price) {
+        price = getEmaPriceUnsafe(id);
+
+        require(diff(block.timestamp, price.publishTime) <= age, "no ema price available which is recent enough");
+
+        return price;
+    }
+
 
     function diff(uint x, uint y) internal pure returns (uint) {
         if (x > y) {
