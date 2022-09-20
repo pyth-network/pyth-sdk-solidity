@@ -17,7 +17,7 @@ interface IPyth {
     /// @param publishTime Publish time of the given price update.
     /// @param price Current price of the given price update.
     /// @param conf Current confidence interval of the given price update.
-    event PriceFeedUpdate(bytes32 indexed id, bool indexed fresh, uint16 chainId, uint64 sequenceNumber, uint64 lastPublishTime, uint64 publishTime, int64 price, uint64 conf);
+    event PriceFeedUpdate(bytes32 indexed id, bool indexed fresh, uint16 chainId, uint64 sequenceNumber, uint lastPublishTime, uint publishTime, int64 price, uint64 conf);
 
     /// @dev Emitted when a batch price update is processed successfully.
     /// @param chainId ID of the source chain that the batch price update comes from.
@@ -56,14 +56,14 @@ interface IPyth {
     /// sufficiently recent for their application. If you are considering using this function, it may be
     /// safer / easier to use either `getCurrentPrice` or `getLatestAvailablePriceWithinDuration`.
     /// @return price - please read the documentation of PythStructs.Price to understand how to use this safely.
-    /// @return publishTime - the UNIX timestamp of when this price was computed.
-    function getLatestAvailablePriceUnsafe(bytes32 id) external view returns (PythStructs.Price memory price, uint64 publishTime);
+    function getLatestAvailablePriceUnsafe(bytes32 id) external view returns (PythStructs.Price memory price);
 
     /// @notice Returns the latest price as long as it was updated within `duration` seconds of the current time.
     /// @dev This function is a sanity-checked version of `getLatestAvailablePriceUnchecked` which is useful in
     /// applications that require a sufficiently-recent price. Reverts if the price wasn't updated sufficiently
     /// recently.
-    function getLatestAvailablePriceWithinDuration(bytes32 id, uint64 duration) external view returns (PythStructs.Price memory price);
+    /// @return price - please read the documentation of PythStructs.Price to understand how to use this safely.
+    function getLatestAvailablePriceWithinDuration(bytes32 id, uint duration) external view returns (PythStructs.Price memory price);
 
     /// @notice Update price feeds with given update messages.
     /// This method requires the caller to pay a fee in wei; the required fee can be computed by calling

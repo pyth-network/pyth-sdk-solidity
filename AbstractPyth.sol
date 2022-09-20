@@ -18,43 +18,23 @@ abstract contract AbstractPyth is IPyth {
     function getValidTimePeriod() public view virtual returns (uint validTimePeriod);
 
     function getCurrentPrice(bytes32 id) external view override returns (PythStructs.Price memory price) {
-        uint64 publishTime;
-        (price, publishTime) = getLatestAvailablePriceUnsafe(id);
-
-        require(diff(block.timestamp, publishTime) <= getValidTimePeriod(), "current price unavailable");
-
-        return price;
+        return getLatestAvailablePriceWithinDuration(id, getValidTimePeriod());
     }
 
     function getEmaPrice(bytes32 id) external view override returns (PythStructs.Price memory price) {
         PythStructs.PriceFeed memory priceFeed = queryPriceFeed(id);
-
-        price.price = priceFeed.emaPrice;
-        price.conf = priceFeed.emaConf;
-        price.expo = priceFeed.expo;
-        return price;
+        return priceFeed.emaPrice;
     }
 
-    function getLatestAvailablePriceUnsafe(bytes32 id) public view override returns (PythStructs.Price memory price, uint64 publishTime) {
+    function getLatestAvailablePriceUnsafe(bytes32 id) public view override returns (PythStructs.Price memory price) {
         PythStructs.PriceFeed memory priceFeed = queryPriceFeed(id);
-
-        price.expo = priceFeed.expo;
-        if (priceFeed.status == PythStructs.PriceStatus.TRADING) {
-            price.price = priceFeed.price;
-            price.conf = priceFeed.conf;
-            return (price, priceFeed.publishTime);
-        }
-
-        price.price = priceFeed.prevPrice;
-        price.conf = priceFeed.prevConf;
-        return (price, priceFeed.prevPublishTime);
+        return priceFeed.price;
     }
 
-    function getLatestAvailablePriceWithinDuration(bytes32 id, uint64 duration) external view override returns (PythStructs.Price memory price) {
-        uint64 publishTime;
-        (price, publishTime) = getLatestAvailablePriceUnsafe(id);
+    function getLatestAvailablePriceWithinDuration(bytes32 id, uint duration) public view override returns (PythStructs.Price memory price) {
+        price = getLatestAvailablePriceUnsafe(id);
 
-        require(diff(block.timestamp, publishTime) <= duration, "No available price within given duration");
+        require(diff(block.timestamp, price.publishTime) <= duration, "no price available which is recent enough");
 
         return price;
     }
@@ -75,7 +55,7 @@ abstract contract AbstractPyth is IPyth {
 
         bool updateNeeded = false;
         for(uint i = 0; i < priceIds.length; i++) {
-            if (!priceFeedExists(priceIds[i]) || queryPriceFeed(priceIds[i]).publishTime < publishTimes[i]) {
+            if (!priceFeedExists(priceIds[i]) || queryPriceFeed(priceIds[i]).price.publishTime < publishTimes[i]) {
                 updateNeeded = true;
             }
         }
