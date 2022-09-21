@@ -15,9 +15,9 @@ interface IPyth {
     /// @param sequenceNumber Sequence number of the batch price update containing this price.
     /// @param lastPublishTime Publish time of the previously stored price.
     /// @param publishTime Publish time of the given price update.
-    /// @param price Current price of the given price update.
-    /// @param conf Current confidence interval of the given price update.
-    event PriceFeedUpdate(bytes32 indexed id, bool indexed fresh, uint16 chainId, uint64 sequenceNumber, uint64 lastPublishTime, uint64 publishTime, int64 price, uint64 conf);
+    /// @param price Price of the given price update.
+    /// @param conf Confidence interval of the given price update.
+    event PriceFeedUpdate(bytes32 indexed id, bool indexed fresh, uint16 chainId, uint64 sequenceNumber, uint lastPublishTime, uint publishTime, int64 price, uint64 conf);
 
     /// @dev Emitted when a batch price update is processed successfully.
     /// @param chainId ID of the source chain that the batch price update comes from.
@@ -32,38 +32,58 @@ interface IPyth {
     /// @param fee Amount of paid fee for updating the prices.
     event UpdatePriceFeeds(address indexed sender, uint batchCount, uint fee);
 
-    /// @notice Returns the current price and confidence interval.
-    /// @dev Reverts if the current price is not available.
-    /// @param id The Pyth Price Feed ID of which to fetch the current price and confidence interval.
-    /// @return price - please read the documentation of PythStructs.Price to understand how to use this safely.
-    function getCurrentPrice(bytes32 id) external view returns (PythStructs.Price memory price);
+    /// @notice Returns the period (in seconds) that a price feed is considered valid since its publish time
+    function getValidTimePeriod() external view returns (uint validTimePeriod);
 
-    /// @notice Returns the exponential moving average price and confidence interval.
-    /// @dev Reverts if the current exponential moving average price is not available.
-    /// @param id The Pyth Price Feed ID of which to fetch the current price and confidence interval.
+    /// @notice Returns the price and confidence interval.
+    /// @dev Reverts if the price has not been updated within the last `getValidTimePeriod()` seconds.
+    /// @param id The Pyth Price Feed ID of which to fetch the price and confidence interval.
+    /// @return price - please read the documentation of PythStructs.Price to understand how to use this safely.
+    function getPrice(bytes32 id) external view returns (PythStructs.Price memory price);
+
+    /// @notice Returns the exponentially-weighted moving average price and confidence interval.
+    /// @dev Reverts if the EMA price is not available.
+    /// @param id The Pyth Price Feed ID of which to fetch the EMA price and confidence interval.
     /// @return price - please read the documentation of PythStructs.Price to understand how to use this safely.
     function getEmaPrice(bytes32 id) external view returns (PythStructs.Price memory price);
 
-    /// @notice Returns the latest available price, along with the timestamp when it was generated.
-    /// @dev This function returns the same price as `getCurrentPrice` in the case where a price was available
-    /// at the time this `PriceFeed` was published (`publish_time`). However, if a price was not available
-    /// at that time, this function returns the price from the latest time at which the price was available.
+    /// @notice Returns the price of a price feed without any sanity checks.
+    /// @dev This function returns the most recent price update in this contract without any recency checks.
+    /// This function is unsafe as the returned price update may be arbitrarily far in the past.
+    ///
+    /// Users of this function should check the `publishTime` in the price to ensure that the returned price is
+    /// sufficiently recent for their application. If you are considering using this function, it may be
+    /// safer / easier to use either `getPrice` or `getPriceNoOlderThan`.
+    /// @return price - please read the documentation of PythStructs.Price to understand how to use this safely.
+    function getPriceUnsafe(bytes32 id) external view returns (PythStructs.Price memory price);
+
+    /// @notice Returns the price that is no older than `age` seconds of the current time.
+    /// @dev This function is a sanity-checked version of `getPriceUnsafe` which is useful in
+    /// applications that require a sufficiently-recent price. Reverts if the price wasn't updated sufficiently
+    /// recently.
+    /// @return price - please read the documentation of PythStructs.Price to understand how to use this safely.
+    function getPriceNoOlderThan(bytes32 id, uint age) external view returns (PythStructs.Price memory price);
+
+    /// @notice Returns the exponentially-weighted moving average price of a price feed without any sanity checks.
+    /// @dev This function returns the same price as `getEmaPrice` in the case where the price is available.
+    /// However, if the price is not recent this function returns the latest available price.
     ///
     /// The returned price can be from arbitrarily far in the past; this function makes no guarantees that
     /// the returned price is recent or useful for any particular application.
     ///
-    /// Users of this function should check the returned timestamp to ensure that the returned price is
+    /// Users of this function should check the `publishTime` in the price to ensure that the returned price is
     /// sufficiently recent for their application. If you are considering using this function, it may be
-    /// safer / easier to use either `getCurrentPrice` or `getLatestAvailablePriceWithinDuration`.
+    /// safer / easier to use either `getEmaPrice` or `getEmaPriceNoOlderThan`.
     /// @return price - please read the documentation of PythStructs.Price to understand how to use this safely.
-    /// @return publishTime - the UNIX timestamp of when this price was computed.
-    function getLatestAvailablePriceUnsafe(bytes32 id) external view returns (PythStructs.Price memory price, uint64 publishTime);
+    function getEmaPriceUnsafe(bytes32 id) external view returns (PythStructs.Price memory price);
 
-    /// @notice Returns the latest price as long as it was updated within `duration` seconds of the current time.
-    /// @dev This function is a sanity-checked version of `getLatestAvailablePriceUnchecked` which is useful in
+    /// @notice Returns the exponentially-weighted moving average price that is no older than `age` seconds
+    /// of the current time.
+    /// @dev This function is a sanity-checked version of `getEmaPriceUnsafe` which is useful in
     /// applications that require a sufficiently-recent price. Reverts if the price wasn't updated sufficiently
     /// recently.
-    function getLatestAvailablePriceWithinDuration(bytes32 id, uint64 duration) external view returns (PythStructs.Price memory price);
+    /// @return price - please read the documentation of PythStructs.Price to understand how to use this safely.
+    function getEmaPriceNoOlderThan(bytes32 id, uint age) external view returns (PythStructs.Price memory price);
 
     /// @notice Update price feeds with given update messages.
     /// This method requires the caller to pay a fee in wei; the required fee can be computed by calling

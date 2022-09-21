@@ -51,17 +51,17 @@ contract MockPyth is AbstractPyth {
             PythStructs.PriceFeed memory priceFeed = abi.decode(updateData[i], (PythStructs.PriceFeed));
 
             bool fresh = false;
-            uint64 lastPublishTime = priceFeeds[priceFeed.id].publishTime;
+            uint lastPublishTime = priceFeeds[priceFeed.id].price.publishTime;
 
-            if (lastPublishTime < priceFeed.publishTime) {
+            if (lastPublishTime < priceFeed.price.publishTime) {
                 // Price information is more recent than the existing price information.
                 fresh = true;
                 priceFeeds[priceFeed.id] = priceFeed;
                 freshPrices += 1;
             }
 
-            emit PriceFeedUpdate(priceFeed.id, fresh, chainId, sequenceNumber, priceFeed.publishTime,
-                lastPublishTime, priceFeed.price, priceFeed.conf);
+            emit PriceFeedUpdate(priceFeed.id, fresh, chainId, sequenceNumber, priceFeed.price.publishTime,
+                lastPublishTime, priceFeed.price.price, priceFeed.price.conf);
         }
 
         // In the real contract, the input of this function contains multiple batches that each contain multiple prices.
@@ -83,30 +83,23 @@ contract MockPyth is AbstractPyth {
         int64 price,
         uint64 conf,
         int32 expo,
-        uint8 status,
         int64 emaPrice,
         uint64 emaConf,
-        uint64 publishTime,
-        int64 prevPrice,
-        uint64 prevConf,
-        uint64 prevPublishTime
+        uint64 publishTime
     ) public pure returns (bytes memory priceFeedData) {
         PythStructs.PriceFeed memory priceFeed;
 
         priceFeed.id = id;
-        priceFeed.productId = id;
-        priceFeed.price = price;
-        priceFeed.conf = conf;
-        priceFeed.expo = expo;
-        priceFeed.status = PythStructs.PriceStatus(status);
-        priceFeed.maxNumPublishers = 10;
-        priceFeed.numPublishers = 10;
-        priceFeed.emaPrice = emaPrice;
-        priceFeed.emaConf = emaConf;
-        priceFeed.publishTime = publishTime;
-        priceFeed.prevPrice = prevPrice;
-        priceFeed.prevConf = prevConf;
-        priceFeed.prevPublishTime = prevPublishTime;
+
+        priceFeed.price.price = price;
+        priceFeed.price.conf = conf;
+        priceFeed.price.expo = expo;
+        priceFeed.price.publishTime = publishTime;
+
+        priceFeed.emaPrice.price = emaPrice;
+        priceFeed.emaPrice.conf = emaConf;
+        priceFeed.emaPrice.expo = expo;
+        priceFeed.emaPrice.publishTime = publishTime;
 
         priceFeedData = abi.encode(priceFeed);
     }

@@ -75,15 +75,15 @@
       },
       {
         "indexed": false,
-        "internalType": "uint64",
+        "internalType": "uint256",
         "name": "lastPublishTime",
-        "type": "uint64"
+        "type": "uint256"
       },
       {
         "indexed": false,
-        "internalType": "uint64",
+        "internalType": "uint256",
         "name": "publishTime",
-        "type": "uint64"
+        "type": "uint256"
       },
       {
         "indexed": false,
@@ -149,11 +149,6 @@
         "type": "int32"
       },
       {
-        "internalType": "uint8",
-        "name": "status",
-        "type": "uint8"
-      },
-      {
         "internalType": "int64",
         "name": "emaPrice",
         "type": "int64"
@@ -167,21 +162,6 @@
         "internalType": "uint64",
         "name": "publishTime",
         "type": "uint64"
-      },
-      {
-        "internalType": "int64",
-        "name": "prevPrice",
-        "type": "int64"
-      },
-      {
-        "internalType": "uint64",
-        "name": "prevConf",
-        "type": "uint64"
-      },
-      {
-        "internalType": "uint64",
-        "name": "prevPublishTime",
-        "type": "uint64"
       }
     ],
     "name": "createPriceFeedUpdateData",
@@ -193,42 +173,6 @@
       }
     ],
     "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "id",
-        "type": "bytes32"
-      }
-    ],
-    "name": "getCurrentPrice",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "int64",
-            "name": "price",
-            "type": "int64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "conf",
-            "type": "uint64"
-          },
-          {
-            "internalType": "int32",
-            "name": "expo",
-            "type": "int32"
-          }
-        ],
-        "internalType": "struct PythStructs.Price",
-        "name": "price",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -257,6 +201,57 @@
             "internalType": "int32",
             "name": "expo",
             "type": "int32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "publishTime",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct PythStructs.Price",
+        "name": "price",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "age",
+        "type": "uint256"
+      }
+    ],
+    "name": "getEmaPriceNoOlderThan",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "int64",
+            "name": "price",
+            "type": "int64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "conf",
+            "type": "uint64"
+          },
+          {
+            "internalType": "int32",
+            "name": "expo",
+            "type": "int32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "publishTime",
+            "type": "uint256"
           }
         ],
         "internalType": "struct PythStructs.Price",
@@ -275,7 +270,7 @@
         "type": "bytes32"
       }
     ],
-    "name": "getLatestAvailablePriceUnsafe",
+    "name": "getEmaPriceUnsafe",
     "outputs": [
       {
         "components": [
@@ -293,16 +288,57 @@
             "internalType": "int32",
             "name": "expo",
             "type": "int32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "publishTime",
+            "type": "uint256"
           }
         ],
         "internalType": "struct PythStructs.Price",
         "name": "price",
         "type": "tuple"
-      },
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
-        "internalType": "uint64",
-        "name": "publishTime",
-        "type": "uint64"
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getPrice",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "int64",
+            "name": "price",
+            "type": "int64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "conf",
+            "type": "uint64"
+          },
+          {
+            "internalType": "int32",
+            "name": "expo",
+            "type": "int32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "publishTime",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct PythStructs.Price",
+        "name": "price",
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",
@@ -316,12 +352,12 @@
         "type": "bytes32"
       },
       {
-        "internalType": "uint64",
-        "name": "duration",
-        "type": "uint64"
+        "internalType": "uint256",
+        "name": "age",
+        "type": "uint256"
       }
     ],
-    "name": "getLatestAvailablePriceWithinDuration",
+    "name": "getPriceNoOlderThan",
     "outputs": [
       {
         "components": [
@@ -339,6 +375,52 @@
             "internalType": "int32",
             "name": "expo",
             "type": "int32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "publishTime",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct PythStructs.Price",
+        "name": "price",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getPriceUnsafe",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "int64",
+            "name": "price",
+            "type": "int64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "conf",
+            "type": "uint64"
+          },
+          {
+            "internalType": "int32",
+            "name": "expo",
+            "type": "int32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "publishTime",
+            "type": "uint256"
           }
         ],
         "internalType": "struct PythStructs.Price",
@@ -418,69 +500,58 @@
             "type": "bytes32"
           },
           {
-            "internalType": "bytes32",
-            "name": "productId",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "int64",
+            "components": [
+              {
+                "internalType": "int64",
+                "name": "price",
+                "type": "int64"
+              },
+              {
+                "internalType": "uint64",
+                "name": "conf",
+                "type": "uint64"
+              },
+              {
+                "internalType": "int32",
+                "name": "expo",
+                "type": "int32"
+              },
+              {
+                "internalType": "uint256",
+                "name": "publishTime",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct PythStructs.Price",
             "name": "price",
-            "type": "int64"
+            "type": "tuple"
           },
           {
-            "internalType": "uint64",
-            "name": "conf",
-            "type": "uint64"
-          },
-          {
-            "internalType": "int32",
-            "name": "expo",
-            "type": "int32"
-          },
-          {
-            "internalType": "enum PythStructs.PriceStatus",
-            "name": "status",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint32",
-            "name": "maxNumPublishers",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "numPublishers",
-            "type": "uint32"
-          },
-          {
-            "internalType": "int64",
+            "components": [
+              {
+                "internalType": "int64",
+                "name": "price",
+                "type": "int64"
+              },
+              {
+                "internalType": "uint64",
+                "name": "conf",
+                "type": "uint64"
+              },
+              {
+                "internalType": "int32",
+                "name": "expo",
+                "type": "int32"
+              },
+              {
+                "internalType": "uint256",
+                "name": "publishTime",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct PythStructs.Price",
             "name": "emaPrice",
-            "type": "int64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "emaConf",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "publishTime",
-            "type": "uint64"
-          },
-          {
-            "internalType": "int64",
-            "name": "prevPrice",
-            "type": "int64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "prevConf",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "prevPublishTime",
-            "type": "uint64"
+            "type": "tuple"
           }
         ],
         "internalType": "struct PythStructs.PriceFeed",
