@@ -48,11 +48,9 @@ contract ExampleContract {
 
 Pyth prices are published on Solana, and relayed to EVM chains using the [Wormhole Network](https://wormholenetwork.com/) as a cross-chain message passing bridge. The Wormhole Network observes when Pyth prices on Solana have changed and publishes an off-chain signed message attesting to this fact. This is explained in more detail [here](https://docs.wormholenetwork.com/wormhole/).
 
-This signed message can then be submitted to the Pyth contract on the EVM networks, which will verify the Wormhole message and update the Pyth contract with the new price.
+This signed message can then be submitted to the Pyth contract on the EVM networks along the required update fee for it, which will verify the Wormhole message and update the Pyth contract with the new price.
 
-### On-demand price updates
-
-Price updates are not submitted on the EVM networks automatically: rather, when a consumer needs to use the value of a price they should first submit the latest Wormhole update for that price to the Pyth contract on the EVM network they are working on. This will make the most recent price update available on-chain for EVM contracts to use. Updating the price needs to be done in an off-chain program, using the [pyth-evm-js](https://github.com/pyth-network/pyth-js/tree/main/pyth-evm-js) package.
+Please refer to [Pyth On-Demand Updates page](https://docs.pyth.network/consume-data/on-demand) for more information.
 
 ## Solidity Target Chains
 
