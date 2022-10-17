@@ -113,7 +113,7 @@ interface IPyth {
     function updatePriceFeedsIfNecessary(bytes[] calldata updateData, bytes32[] calldata priceIds, uint64[] calldata publishTimes) external payable;
 
     /// @notice Returns the required fee to update an array of price updates.
-    /// @param updateDataSize Number of price updates.
+    /// @param updateData Array of price update data.
     /// @return feeAmount The required fee in Wei.
-    function getUpdateFee(uint updateDataSize) external view returns (uint feeAmount);
+    function getUpdateFee(bytes[] calldata updateData) external view returns (uint feeAmount);
 }

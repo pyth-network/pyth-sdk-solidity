@@ -33,7 +33,7 @@ contract MockPyth is AbstractPyth {
     // You can create this data either by calling createPriceFeedData or
     // by using web3.js or ethers abi utilities.
     function updatePriceFeeds(bytes[] calldata updateData) public override payable {
-        uint requiredFee = getUpdateFee(updateData.length);
+        uint requiredFee = getUpdateFee(updateData);
         require(msg.value >= requiredFee, "Insufficient paid fee amount");
 
         if (msg.value > requiredFee) {
@@ -74,8 +74,8 @@ contract MockPyth is AbstractPyth {
         emit UpdatePriceFeeds(msg.sender, 1, requiredFee);
     }
 
-    function getUpdateFee(uint updateDataSize) public override view returns (uint feeAmount) {
-        return singleUpdateFeeInWei * updateDataSize;
+    function getUpdateFee(bytes[] calldata updateData) public override view returns (uint feeAmount) {
+        return singleUpdateFeeInWei * updateData.length;
     }
 
     function createPriceFeedUpdateData(
