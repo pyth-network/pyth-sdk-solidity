@@ -43,13 +43,6 @@ contract MockPyth is AbstractPyth {
         uint requiredFee = getUpdateFee(updateData);
         require(msg.value >= requiredFee, "Insufficient paid fee amount");
 
-        if (msg.value > requiredFee) {
-            (bool success, ) = payable(msg.sender).call{
-                value: msg.value - requiredFee
-            }("");
-            require(success, "failed to transfer update fee");
-        }
-
         // Chain ID is id of the source chain that the price update comes from. Since it is just a mock contract
         // We set it to 1.
         uint16 chainId = 1;
