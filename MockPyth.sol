@@ -41,8 +41,6 @@ contract MockPyth is AbstractPyth {
             require(success, "failed to transfer update fee");
         }
 
-        uint freshPrices = 0;
-
         // Chain ID is id of the source chain that the price update comes from. Since it is just a mock contract
         // We set it to 1.
         uint16 chainId = 1;
@@ -50,28 +48,20 @@ contract MockPyth is AbstractPyth {
         for(uint i = 0; i < updateData.length; i++) {
             PythStructs.PriceFeed memory priceFeed = abi.decode(updateData[i], (PythStructs.PriceFeed));
 
-            bool fresh = false;
             uint lastPublishTime = priceFeeds[priceFeed.id].price.publishTime;
 
             if (lastPublishTime < priceFeed.price.publishTime) {
                 // Price information is more recent than the existing price information.
-                fresh = true;
                 priceFeeds[priceFeed.id] = priceFeed;
-                freshPrices += 1;
+                emit PriceFeedUpdate(priceFeed.id, uint64(lastPublishTime), priceFeed.price.price, priceFeed.price.conf);
             }
-
-            emit PriceFeedUpdate(priceFeed.id, fresh, chainId, sequenceNumber, priceFeed.price.publishTime,
-                lastPublishTime, priceFeed.price.price, priceFeed.price.conf);
         }
 
         // In the real contract, the input of this function contains multiple batches that each contain multiple prices.
         // This event is emitted when a batch is processed. In this mock contract we consider there is only one batch of prices.
         // Each batch has (chainId, sequenceNumber) as it's unique identifier. Here chainId is set to 1 and an increasing sequence number is used.
-        emit BatchPriceFeedUpdate(chainId, sequenceNumber, updateData.length, freshPrices);
+        emit BatchPriceFeedUpdate(chainId, sequenceNumber);
         sequenceNumber += 1;
-
-        // There is only 1 batch of prices
-        emit UpdatePriceFeeds(msg.sender, 1, requiredFee);
     }
 
     function getUpdateFee(bytes[] calldata updateData) public override view returns (uint feeAmount) {
