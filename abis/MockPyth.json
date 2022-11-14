@@ -29,18 +29,6 @@
         "internalType": "uint64",
         "name": "sequenceNumber",
         "type": "uint64"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "batchSize",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "freshPricesInBatch",
-        "type": "uint256"
       }
     ],
     "name": "BatchPriceFeedUpdate",
@@ -56,34 +44,10 @@
         "type": "bytes32"
       },
       {
-        "indexed": true,
-        "internalType": "bool",
-        "name": "fresh",
-        "type": "bool"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint16",
-        "name": "chainId",
-        "type": "uint16"
-      },
-      {
         "indexed": false,
         "internalType": "uint64",
-        "name": "sequenceNumber",
-        "type": "uint64"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "lastPublishTime",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
         "name": "publishTime",
-        "type": "uint256"
+        "type": "uint64"
       },
       {
         "indexed": false,
@@ -99,31 +63,6 @@
       }
     ],
     "name": "PriceFeedUpdate",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "batchCount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "fee",
-        "type": "uint256"
-      }
-    ],
-    "name": "UpdatePriceFeeds",
     "type": "event"
   },
   {
