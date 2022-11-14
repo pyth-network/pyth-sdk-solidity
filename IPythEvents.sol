@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.0;
 
-interface PythEvents {
+interface IPythEvents {
     /// @dev Emitted when an update for price feed with `id` is processed successfully.
     /// @param id The Pyth Price Feed ID.
     /// @param publishTime Publish time of the given price update.
