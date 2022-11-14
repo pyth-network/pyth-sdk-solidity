@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 contract PythStructs {
-
     // A price with a degree of uncertainty, represented as a price +- a confidence interval.
     //
     // The confidence interval roughly corresponds to the standard error of a normal distribution.

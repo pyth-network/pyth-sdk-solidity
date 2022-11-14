@@ -7,6 +7,7 @@
     "url": "git+https://github.com/pyth-network/pyth-sdk-solidity.git"
   },
   "scripts": {
+    "format": "npx prettier --write .",
     "generate-abi": "node scripts/generateAbi.js",
     "build-mock": "solcjs --bin MockPyth.sol -o build/"
   },
@@ -22,6 +23,8 @@
   },
   "homepage": "https://github.com/pyth-network/pyth-sdk-solidity#readme",
   "devDependencies": {
+    "prettier": "^2.7.1",
+    "prettier-plugin-solidity": "^1.0.0-rc.1",
     "solc": "^0.8.15"
   }
 }
