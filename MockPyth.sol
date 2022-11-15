@@ -43,13 +43,6 @@ contract MockPyth is AbstractPyth {
         uint requiredFee = getUpdateFee(updateData);
         require(msg.value >= requiredFee, "Insufficient paid fee amount");
 
-        if (msg.value > requiredFee) {
-            (bool success, ) = payable(msg.sender).call{
-                value: msg.value - requiredFee
-            }("");
-            require(success, "failed to transfer update fee");
-        }
-
         // Chain ID is id of the source chain that the price update comes from. Since it is just a mock contract
         // We set it to 1.
         uint16 chainId = 1;
@@ -85,6 +78,43 @@ contract MockPyth is AbstractPyth {
         bytes[] calldata updateData
     ) public view override returns (uint feeAmount) {
         return singleUpdateFeeInWei * updateData.length;
+    }
+
+    function parsePriceFeedUpdates(
+        bytes[] calldata updateData,
+        bytes32[] calldata priceIds,
+        uint64 minPublishTime,
+        uint64 maxPublishTime
+    ) external payable override returns (PythStructs.PriceFeed[] memory feeds) {
+        uint requiredFee = getUpdateFee(updateData);
+        require(msg.value >= requiredFee, "Insufficient paid fee amount");
+
+        feeds = new PythStructs.PriceFeed[](priceIds.length);
+
+        for (uint i = 0; i < priceIds.length; i++) {
+            for (uint j = 0; j < updateData.length; j++) {
+                feeds[i] = abi.decode(updateData[j], (PythStructs.PriceFeed));
+
+                if (feeds[i].id == priceIds[i]) {
+                    break;
+                }
+            }
+
+            require(
+                feeds[i].id == priceIds[i],
+                "price id does not exist in the updateData"
+            );
+
+            uint publishTime = feeds[i].price.publishTime;
+            require(
+                minPublishTime <= publishTime,
+                "price feed publish time out of range"
+            );
+            require(
+                publishTime <= maxPublishTime,
+                "price feed publish time out of range"
+            );
+        }
     }
 
     function createPriceFeedUpdateData(
