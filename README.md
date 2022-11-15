@@ -31,7 +31,7 @@ contract ExampleContract {
     pyth = IPyth(pythContract);
   }
 
-  function getBTCUSDPrice(
+  function getBtcUsdPrice(
     bytes[] calldata priceUpdateData
   ) public payable returns (PythStructs.Price memory) {
     // Update the prices to the latest available values and pay the required fee for it. The `priceUpdateData` data
