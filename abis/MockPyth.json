@@ -17,7 +17,7 @@
   },
   {
     "inputs": [],
-    "name": "InsufficiantFee",
+    "name": "InsufficientFee",
     "type": "error"
   },
   {

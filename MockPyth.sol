@@ -39,7 +39,7 @@ contract MockPyth is AbstractPyth {
         bytes[] calldata updateData
     ) public payable override {
         uint requiredFee = getUpdateFee(updateData);
-        if (msg.value < requiredFee) revert PythErrors.InsufficiantFee();
+        if (msg.value < requiredFee) revert PythErrors.InsufficientFee();
 
         // Chain ID is id of the source chain that the price update comes from. Since it is just a mock contract
         // We set it to 1.
@@ -85,7 +85,7 @@ contract MockPyth is AbstractPyth {
         uint64 maxPublishTime
     ) external payable override returns (PythStructs.PriceFeed[] memory feeds) {
         uint requiredFee = getUpdateFee(updateData);
-        if (msg.value < requiredFee) revert PythErrors.InsufficiantFee();
+        if (msg.value < requiredFee) revert PythErrors.InsufficientFee();
 
         feeds = new PythStructs.PriceFeed[](priceIds.length);
 

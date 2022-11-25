@@ -10,7 +10,7 @@ library PythErrors {
     // Update data is invalid (e.g., deserialization error)
     error InvalidUpdateData();
     // Insufficient fee is paid to the method.
-    error InsufficiantFee();
+    error InsufficientFee();
     // There is no fresh update, whereas expected fresh updates.
     error NoFreshUpdate();
     // There is no price feed found within the given range or it does not exists.
