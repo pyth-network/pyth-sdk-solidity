@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import "./PythStructs.sol";
 import "./IPyth.sol";
+import "./PythErrors.sol";
 
 abstract contract AbstractPyth is IPyth {
     /// @notice Returns the price feed with given id.
@@ -50,10 +51,8 @@ abstract contract AbstractPyth is IPyth {
     ) public view virtual override returns (PythStructs.Price memory price) {
         price = getPriceUnsafe(id);
 
-        require(
-            diff(block.timestamp, price.publishTime) <= age,
-            "no price available which is recent enough"
-        );
+        if (diff(block.timestamp, price.publishTime) > age)
+            revert PythErrors.StalePrice();
 
         return price;
     }
@@ -71,10 +70,8 @@ abstract contract AbstractPyth is IPyth {
     ) public view virtual override returns (PythStructs.Price memory price) {
         price = getEmaPriceUnsafe(id);
 
-        require(
-            diff(block.timestamp, price.publishTime) <= age,
-            "no ema price available which is recent enough"
-        );
+        if (diff(block.timestamp, price.publishTime) > age)
+            revert PythErrors.StalePrice();
 
         return price;
     }
@@ -97,28 +94,20 @@ abstract contract AbstractPyth is IPyth {
         bytes32[] calldata priceIds,
         uint64[] calldata publishTimes
     ) external payable virtual override {
-        require(
-            priceIds.length == publishTimes.length,
-            "priceIds and publishTimes arrays should have same length"
-        );
+        if (priceIds.length != publishTimes.length)
+            revert PythErrors.InvalidArgument();
 
-        bool updateNeeded = false;
         for (uint i = 0; i < priceIds.length; i++) {
             if (
                 !priceFeedExists(priceIds[i]) ||
                 queryPriceFeed(priceIds[i]).price.publishTime < publishTimes[i]
             ) {
-                updateNeeded = true;
-                break;
+                updatePriceFeeds(updateData);
+                return;
             }
         }
 
-        require(
-            updateNeeded,
-            "no prices in the submitted batch have fresh prices, so this update will have no effect"
-        );
-
-        updatePriceFeeds(updateData);
+        revert PythErrors.NoFreshUpdate();
     }
 
     function parsePriceFeedUpdates(

@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import "./AbstractPyth.sol";
 import "./PythStructs.sol";
+import "./PythErrors.sol";
 
 contract MockPyth is AbstractPyth {
     mapping(bytes32 => PythStructs.PriceFeed) priceFeeds;
@@ -19,10 +20,7 @@ contract MockPyth is AbstractPyth {
     function queryPriceFeed(
         bytes32 id
     ) public view override returns (PythStructs.PriceFeed memory priceFeed) {
-        require(
-            priceFeeds[id].id != 0,
-            "no price feed found for the given price id"
-        );
+        if (priceFeeds[id].id == 0) revert PythErrors.PriceFeedNotFound();
         return priceFeeds[id];
     }
 
@@ -41,7 +39,7 @@ contract MockPyth is AbstractPyth {
         bytes[] calldata updateData
     ) public payable override {
         uint requiredFee = getUpdateFee(updateData);
-        require(msg.value >= requiredFee, "Insufficient paid fee amount");
+        if (msg.value < requiredFee) revert PythErrors.InsufficiantFee();
 
         // Chain ID is id of the source chain that the price update comes from. Since it is just a mock contract
         // We set it to 1.
@@ -87,7 +85,7 @@ contract MockPyth is AbstractPyth {
         uint64 maxPublishTime
     ) external payable override returns (PythStructs.PriceFeed[] memory feeds) {
         uint requiredFee = getUpdateFee(updateData);
-        require(msg.value >= requiredFee, "Insufficient paid fee amount");
+        if (msg.value < requiredFee) revert PythErrors.InsufficiantFee();
 
         feeds = new PythStructs.PriceFeed[](priceIds.length);
 
@@ -96,24 +94,20 @@ contract MockPyth is AbstractPyth {
                 feeds[i] = abi.decode(updateData[j], (PythStructs.PriceFeed));
 
                 if (feeds[i].id == priceIds[i]) {
-                    break;
+                    uint publishTime = feeds[i].price.publishTime;
+                    if (
+                        minPublishTime <= publishTime &&
+                        publishTime <= maxPublishTime
+                    ) {
+                        break;
+                    } else {
+                        feeds[i].id = 0;
+                    }
                 }
             }
 
-            require(
-                feeds[i].id == priceIds[i],
-                "price id does not exist in the updateData"
-            );
-
-            uint publishTime = feeds[i].price.publishTime;
-            require(
-                minPublishTime <= publishTime,
-                "price feed publish time out of range"
-            );
-            require(
-                publishTime <= maxPublishTime,
-                "price feed publish time out of range"
-            );
+            if (feeds[i].id != priceIds[i])
+                revert PythErrors.PriceFeedNotFoundWithinRange();
         }
     }
 
