@@ -16,6 +16,36 @@
     "type": "constructor"
   },
   {
+    "inputs": [],
+    "name": "InsufficientFee",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidArgument",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NoFreshUpdate",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PriceFeedNotFound",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PriceFeedNotFoundWithinRange",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "StalePrice",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
