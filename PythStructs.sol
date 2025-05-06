@@ -1,6 +1,18 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.0;
 
+/**
+ * @notice **Deprecated** – this codebase will be removed on **1 August 2025**.
+ *
+ * @dev    Switch to the maintained package:
+ *         `npm install @pythnetwork/pyth-sdk-solidity`
+ *
+ *         Migration guide:
+ *         https://docs.pyth.network/price-feeds/use-real-time-data/evm
+ *
+ * @custom:deprecated Repository scheduled for deletion on 1 August 2025.
+ *                    Use `@pythnetwork/pyth-sdk-solidity` instead.
+ */
 contract PythStructs {
     // A price with a degree of uncertainty, represented as a price +- a confidence interval.
     //
