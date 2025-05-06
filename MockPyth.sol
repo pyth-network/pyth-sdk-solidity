@@ -5,6 +5,18 @@ import "./AbstractPyth.sol";
 import "./PythStructs.sol";
 import "./PythErrors.sol";
 
+/**
+ * @notice **Deprecated** – this codebase will be removed on **1 August 2025**.
+ *
+ * @dev    Switch to the maintained package:
+ *         `npm install @pythnetwork/pyth-sdk-solidity`
+ *
+ *         Migration guide:
+ *         https://docs.pyth.network/price-feeds/use-real-time-data/evm
+ *
+ * @custom:deprecated Repository scheduled for deletion on 1 August 2025.
+ *                    Use `@pythnetwork/pyth-sdk-solidity` instead.
+ */
 contract MockPyth is AbstractPyth {
     mapping(bytes32 => PythStructs.PriceFeed) priceFeeds;
     uint64 sequenceNumber;
