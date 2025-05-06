@@ -1,3 +1,10 @@
+> [!CAUTION]
+> **This is an outdated and unsupported version of the SDK**
+> This GitHub repository will be removed on August 1st, 2025. To continue using the Pyth Solidity SDK, you must migrate to the [@pythnetwork/pyth-sdk-solidity package on NPM](https://www.npmjs.com/package/@pythnetwork/pyth-sdk-solidity).
+> For more information, see [How to Use Real-Time Data in EVM Contracts](https://docs.pyth.network/price-feeds/use-real-time-data/evm). The SDK source has moved to the [Crosschain Pyth programs and utilities repository](https://github.com/pyth-network/pyth-crosschain).
+
+---
+
 # Pyth Solidity SDK
 
 This package provides utilities for consuming prices from the [Pyth Network](https://pyth.network/) Oracle using Solidity. Also, it contains [the Pyth Interface ABI](./abis/IPyth.json) that you can use in your libraries
